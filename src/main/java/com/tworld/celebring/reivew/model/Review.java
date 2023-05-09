@@ -1,4 +1,4 @@
-package com.tworld.celebring.celeb.model;
+package com.tworld.celebring.reivew.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,19 +11,18 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @Entity
-@DynamicInsert
-@Table(name = "celeb")
-public class Celeb {
+@DynamicInsert  // insertn 시 null 인 필드 제외
+@Table(name = "review")
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NonNull
-    private String name;
+    private Long eventId;
 
     @NonNull
-    @Temporal(TemporalType.DATE)
-    private Date eventDate;
+    private String explain;
 
     private Long imageId;
 
@@ -33,8 +32,6 @@ public class Celeb {
     @NonNull
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
-
-    private Long updateBy;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateAt;
@@ -46,5 +43,4 @@ public class Celeb {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date deleteAt;
-
 }
