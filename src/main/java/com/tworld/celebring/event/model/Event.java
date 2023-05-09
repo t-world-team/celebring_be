@@ -1,4 +1,4 @@
-package com.tworld.celebring.celeb.model;
+package com.tworld.celebring.event.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,21 +11,42 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @Entity
-@DynamicInsert
-@Table(name = "celeb")
-public class Celeb {
+@DynamicInsert  // insertn 시 null 인 필드 제외
+@Table(name = "event")
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NonNull
+    private Long celebId;
 
     @NonNull
     private String name;
 
     @NonNull
     @Temporal(TemporalType.DATE)
-    private Date eventDate;
+    private Date startDate;
 
-    private Long imageId;
+    @NonNull
+    @Temporal(TemporalType.DATE)
+    private Date endDate;
+
+    private String address;
+
+    private String openingTime;
+
+    private String sns;
+
+    private Long headerImageId;
+
+    private Long mainImageId;
+
+    private String explainNo1;
+
+    private String explainNo2;
+
+    private String explainNo3;
 
     @NonNull
     private Long createBy;
