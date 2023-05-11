@@ -10,13 +10,10 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @Entity
-@IdClass(CelebLinkPk.class)
 @Table(name = "celeb_link")
 public class CelebLink {
-    @Id
-    private Long groupId;
-    @Id
-    private Long memberId;
+    @EmbeddedId
+    private CelebLinkID celebLinkID;
 
     @NonNull
     private Long createBy;
