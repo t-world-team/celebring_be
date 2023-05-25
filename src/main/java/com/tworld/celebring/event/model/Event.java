@@ -42,12 +42,6 @@ public class Event {
 
     private Long mainImageId;
 
-    private String explainNo1;
-
-    private String explainNo2;
-
-    private String explainNo3;
-
     @NonNull
     private Long createBy;
 

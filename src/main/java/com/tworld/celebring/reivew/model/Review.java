@@ -11,7 +11,7 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @Entity
-@DynamicInsert  // insertn 시 null 인 필드 제외
+@DynamicInsert  // insert 시 null 인 필드 제외
 @Table(name = "review")
 public class Review {
     @Id
@@ -23,8 +23,6 @@ public class Review {
 
     @NonNull
     private String explain;
-
-    private Long imageId;
 
     @NonNull
     private Long createBy;
