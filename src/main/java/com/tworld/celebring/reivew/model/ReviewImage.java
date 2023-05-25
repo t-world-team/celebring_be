@@ -8,10 +8,14 @@ import lombok.NonNull;
 @Getter
 @NoArgsConstructor
 @Entity
+@IdClass(ReviewImagePK.class)
 @Table(name = "review_image")
 public class ReviewImage {
-    @EmbeddedId
-    private ReviewImageID reviewImageID;
+    @Id
+    private Long reviewId;
+
+    @Id
+    private Long imageId;
 
     @NonNull
     private int order;
