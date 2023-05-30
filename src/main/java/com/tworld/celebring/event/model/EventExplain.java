@@ -1,4 +1,4 @@
-package com.tworld.celebring.celeb.model;
+package com.tworld.celebring.event.model;
 
 import com.tworld.celebring.common.model.CreateEntity;
 import com.tworld.celebring.common.model.DeleteEntity;
@@ -12,13 +12,13 @@ import java.util.Date;
 
 @Getter
 @NoArgsConstructor
-@Entity(name = "celeb_like")
-public class CelebLike {
+@Entity(name = "event_explain")
+public class EventExplain {
     @Id
-    private Long userId;
-    @Id
-    private Long celebId;
-
-    @NonNull @Temporal(TemporalType.TIMESTAMP)
-    private Date createAt;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NonNull private Long eventId;
+    @NonNull
+    private String content;
+    @NonNull private int seq;
 }

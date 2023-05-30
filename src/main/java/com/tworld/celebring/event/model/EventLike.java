@@ -8,12 +8,12 @@ import java.util.Date;
 
 @Getter
 @NoArgsConstructor
-@Entity
-@Table(name = "event_like")
+@Entity(name = "event_like")
 public class EventLike {
-    @EmbeddedId
-    private EventLikeID eventLikeID;
-
+    @Id
+    private Long userId;
+    @Id
+    private Long celebId;
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
 }
