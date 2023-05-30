@@ -1,8 +1,7 @@
-package com.tworld.celebring.celeb.model;
+package com.tworld.celebring.user.model;
 
 import com.tworld.celebring.common.model.CreateEntity;
 import com.tworld.celebring.common.model.DeleteEntity;
-import com.tworld.celebring.common.model.UpdateEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,24 +11,23 @@ import java.util.Date;
 
 @Getter
 @NoArgsConstructor
-@Entity(name = "celeb")
-public class Celeb {
+@Entity(name = "user")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
-    private String name;
+    @NonNull @Column(unique = true)
+    private Long email;
+    @NonNull private String name;
+    private String imageUrl;
+    @NonNull @Column(unique = true)
+    private String oauthId;
+    @NonNull private String role;
 
-    @NonNull @Temporal(TemporalType.DATE)
-    private Date eventDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createAt;
 
-    @NonNull private Long imageId;
-
-    @Embedded
-    CreateEntity createEntity;
-    @Embedded
-    UpdateEntity updateEntity;
     @Embedded
     DeleteEntity deleteEntity;
 }
