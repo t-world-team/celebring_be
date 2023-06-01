@@ -27,13 +27,12 @@ jobs:
       - run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application-dev.properties
       - run: cat ./src/main/resources/application-dev.properties
 
-      - name: Setup MySQL
-        uses: samin/mysql-action@v1
+      - name: Setup MariaDB
+        uses: getong/mariadb-action@v1.1
         with:
-          character set server: 'utf8'
           mysql database: 'celebring'
           mysql user: 'admin'
-          mysql password: ${{ secrets.MYSQL_PASSWORD }} # github Secret 탭에서 설정하세요!
+          mysql password: ${{ secrets.DB_PASSWORD }} # github Secret 탭에서 설정하세요!
 
       - uses: actions/cache@v3  # 반복되는 작업 캐싱하기
         with:
