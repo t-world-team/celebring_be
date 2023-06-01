@@ -17,8 +17,8 @@ public class EventExplain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NonNull private Long eventId;
-    @NonNull
-    private String content;
-    @NonNull private int seq;
+    @NonNull private String content;
+    @NonNull private Integer seq;
 }
