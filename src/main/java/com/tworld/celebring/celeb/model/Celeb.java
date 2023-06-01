@@ -26,6 +26,8 @@ public class Celeb {
 
     @NonNull private Long imageId;
 
+    private String keywords;
+
     @Embedded
     CreateEntity createEntity;
     @Embedded
