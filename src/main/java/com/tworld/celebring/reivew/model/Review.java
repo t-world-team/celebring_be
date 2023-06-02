@@ -22,7 +22,6 @@ public class Review {
     @NonNull
     private Long eventId;
     @NonNull private String content;
-    private String imageUrl;
 
     @Embedded
     CreateEntity createEntity;
