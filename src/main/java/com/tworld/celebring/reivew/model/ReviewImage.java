@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+/**
+ * 2023.06.02 미사용
+ */
 @Getter
 @NoArgsConstructor
 @Entity(name = "review_image")
