@@ -27,8 +27,8 @@ public class Event {
     private String address;
     private String openingTime;
     private String sns;
-    private Long headerImageId;
-    private Long mainImageId;
+    private String headerImageUrl;
+    private String mainImageUrl;
 
     @Embedded
     CreateEntity createEntity;
