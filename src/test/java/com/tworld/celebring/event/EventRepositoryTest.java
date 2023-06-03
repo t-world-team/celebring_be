@@ -51,6 +51,8 @@ public class EventRepositoryTest {
                 ))
                 .from(e)
                 .where(Expressions.currentDate().between(e.startDate, e.endDate))
+                .offset(0)  // 시작 인덱스
+                .limit(5)   // 개수
                 .fetch();
 
 //        assertThat(events.size()).isEqualTo(2);
