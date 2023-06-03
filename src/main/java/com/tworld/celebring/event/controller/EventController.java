@@ -1,32 +1,34 @@
 package com.tworld.celebring.event.controller;
 
+import com.tworld.celebring.event.dto.EventListDto;
+import com.tworld.celebring.event.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "events", description = "이벤트 API")
-@RestController
-@RequestMapping("/events")
-public class EventController {
+import java.util.List;
 
-    @Operation(summary = "test events", description = "swagger 테스트를 위한 api")
+@Tag(name = "events", description = "이벤트 API")
+@RequestMapping("/events")
+@RestController
+@RequiredArgsConstructor
+public class EventController {
+    private final EventService eventService;
+
+    @Operation(summary = "get now event list", description = "현재 진행중인 이벤트 조회")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+            @ApiResponse(responseCode = "200", description = "OK")
     })
-    @Parameters({
-            @Parameter(name = "id", description = "아이디", example = "1")
-    })
-    @GetMapping("/test")
-    public String eventTest(@RequestParam(value = "id") String id) {
-        return "check event " + id;
+    @GetMapping("")
+    public ResponseEntity<?> getNowEventList() {
+        List<EventListDto> list = eventService.getNowEventList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
