@@ -1,6 +1,7 @@
 package com.tworld.celebring.security.config;
 
 import com.tworld.celebring.login.service.LoginService;
+import com.tworld.celebring.login.service.LoginSuccessHandler;
 import com.tworld.celebring.security.token.TokenFilter;
 import com.tworld.celebring.security.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final LoginService loginService;
+    private final LoginSuccessHandler successHandler;
     private final TokenProvider tokenProvider;
 
     @Bean
@@ -24,6 +26,7 @@ public class SecurityConfig {
 
         // 로그인 oauth2
         http.oauth2Login()
+                .successHandler(successHandler)
                 .userInfoEndpoint()
                 .userService(loginService);
 
