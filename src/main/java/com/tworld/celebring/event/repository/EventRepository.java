@@ -18,7 +18,7 @@ public class EventRepository {
 
     QEvent e = new QEvent("e");
 
-    public List<EventListDto> findNowEvents(Pageable pageable) {
+    public List<EventListDto> findCurrentEvents(Pageable pageable) {
         return queryFactory
                 .select(new QEventListDto(
                         e.id,
@@ -32,13 +32,16 @@ public class EventRepository {
                 .where(Expressions.currentDate().between(e.startDate, e.endDate))
                 .offset(pageable.getOffset())    // 시작 인덱스
                 .limit(pageable.getPageSize())   // 개수
+                .orderBy(e.startDate.asc())
                 .fetch();
     }
 
-    public long findNowEventsCount() {
+    public long findCurrentEventsCount() {
         return queryFactory
                 .selectFrom(e)
                 .where(Expressions.currentDate().between(e.startDate, e.endDate))
                 .fetchCount();
     }
+
+
 }
