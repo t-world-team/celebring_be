@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.6'
     id 'io.spring.dependency-management' version '1.1.0'
-    id "com.ewerk.gradle.plugins.querydsl" version '1.0.10' //querydsl 추가
 }
 
 group = 'com.tworld'
@@ -47,16 +46,12 @@ tasks.named('test') {
 
 // === Querydsl 빌드 옵션 (선택사항) ===
 def querydslDir = "$buildDir/generated/querydsl"
-querydsl {
-    jpa = true
-    querydslSourcesDir = querydslDir
-}
 sourceSets {
-    main.java.srcDir querydslDir
+    main.java.srcDirs += [ querydslDir ]
 }
-configurations {
-    querydsl.extendsFrom compileClasspath
+tasks.withType(JavaCompile) {
+    options.generatedSourceOutputDirectory = file(querydslDir)
 }
-compileQuerydsl {
-    options.annotationProcessorPath = configurations.querydsl
+clean.doLast {
+    file(querydslDir).deleteDir()
 }
