@@ -1,7 +1,5 @@
 package com.tworld.celebring.common.dto;
 
-import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -13,12 +11,13 @@ public class PageIndex {
     private int pageSize;
     private List<?> contents;
 
-    @Builder
-    public PageIndex(Long totalElements, int pageNumber, int pageSize, List<?> contents) {
-        this.totalElements = totalElements;
-        this.pageNumber = pageNumber;
-        this.pageSize = pageSize;
-        this.contents = contents;
+    public static List<?> getPage(List<?> list, int pageNumber, int pageSize) {
+        int totalElements = list.size();
+        int totalPages = (int) Math.ceil((double) totalElements/pageSize);
 
+        int fromIndex = pageNumber * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, totalElements);
+
+        return list.subList(fromIndex, toIndex);
     }
 }

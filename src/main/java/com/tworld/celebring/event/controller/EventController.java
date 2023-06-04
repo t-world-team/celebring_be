@@ -39,4 +39,20 @@ public class EventController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @Operation(summary = "celeb's event list", description = "셀럽의 이벤트 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK")
+    })
+    @Parameters({
+            @Parameter(name = "celebId", description = "셀럽 ID", example = "2", required = true),
+            @Parameter(name = "page", description = "페이지 번호 (0번부터 시작)", example = "0", required = true),
+            @Parameter(name = "size", description = "한페이지에 나오는 개수", example = "10")
+    })
+    @GetMapping("/{celebId}")
+    public ResponseEntity<?> getCelebEventList(
+            @PathVariable int celebId,
+            @RequestParam(value = "page") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
+        Page<EventListDto> list = eventService.getCelebEventList((long) celebId, page, size);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }

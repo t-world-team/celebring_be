@@ -1,5 +1,6 @@
 package com.tworld.celebring.event.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tworld.celebring.event.dto.EventListDto;
@@ -43,5 +44,67 @@ public class EventRepository {
                 .fetchCount();
     }
 
+    public long findEventsCountByCeleb(Long celebId) {
+        return queryFactory
+                .selectFrom(e)
+                .where(e.celebId.eq(celebId))
+                .fetchCount();
+    }
 
+    public List<EventListDto> findCurrentEventsByCeleb(Long celebId) {
+        return queryFactory
+                .select(new QEventListDto(
+                        e.id,
+                        e.name,
+                        e.startDate,
+                        e.endDate,
+                        e.address,
+                        e.mainImageUrl
+                ))
+                .from(e)
+                .where(
+                        e.celebId.eq(celebId)
+                                .and(Expressions.currentDate().between(e.startDate, e.endDate))
+                )
+                .orderBy(e.startDate.asc())
+                .fetch();
+    }
+
+    public List<EventListDto> findUpcomingEventsByCeleb(Long celebId) {
+        return queryFactory
+                .select(new QEventListDto(
+                        e.id,
+                        e.name,
+                        e.startDate,
+                        e.endDate,
+                        e.address,
+                        e.mainImageUrl
+                ))
+                .from(e)
+                .where(
+                        e.celebId.eq(celebId)
+                                .and(Expressions.currentDate().lt(e.startDate))
+                )
+                .orderBy(e.startDate.asc())
+                .fetch();
+    }
+
+    public List<EventListDto> findPastEventsByCeleb(Long celebId) {
+        return queryFactory
+                .select(new QEventListDto(
+                        e.id,
+                        e.name,
+                        e.startDate,
+                        e.endDate,
+                        e.address,
+                        e.mainImageUrl
+                ))
+                .from(e)
+                .where(
+                        e.celebId.eq(celebId)
+                                .and(Expressions.currentDate().gt(e.endDate))
+                )
+                .orderBy(e.endDate.asc())
+                .fetch();
+    }
 }
