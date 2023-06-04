@@ -13,10 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,9 +33,10 @@ public class EventController {
             @Parameter(name = "size", description = "한페이지에 나오는 개수", example = "10")
     })
     @GetMapping("")
-    public ResponseEntity<?> getNowEventList(
+    public ResponseEntity<?> getCurrentEventList(
             @RequestParam(value = "page") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
-        Page<EventListDto> list = eventService.getNowEventList(PageRequest.of(page, size));  // page는 0부터 시작
+        Page<EventListDto> list = eventService.getCurrentEventList(PageRequest.of(page, size));  // page는 0부터 시작
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
 }

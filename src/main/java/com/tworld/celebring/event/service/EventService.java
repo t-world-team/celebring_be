@@ -15,9 +15,10 @@ import java.util.List;
 public class EventService {
     private final EventRepository eventRepository;
 
-    public Page<EventListDto> getNowEventList(Pageable pageable) {
-        List<EventListDto> content = eventRepository.findNowEvents(pageable);
-        Long count = eventRepository.findNowEventsCount();
+    public Page<EventListDto> getCurrentEventList(Pageable pageable) {
+        List<EventListDto> content = eventRepository.findCurrentEvents(pageable);
+        Long count = eventRepository.findCurrentEventsCount();
         return new PageImpl<>(content, pageable, count);
     }
+
 }
