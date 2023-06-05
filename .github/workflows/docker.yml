@@ -75,7 +75,7 @@ jobs:
           mkdir -p deploy
           cp -r .ebextensions deploy/.ebextensions
           cp Dockerrun.aws.json deploy/Dockerrun.aws.json # Elastic Beanstalk에서 Docker 실행 시 체크하는 설정 파일
-          cd deploy && zip -r deploy.zip .
+          cd deploy && zip -r deploy-${{steps.current-time.outputs.formattedTime}}.zip .
 
       - name: Deploy Consumer to EB
         uses: einaregilsson/beanstalk-deploy@v21
@@ -86,5 +86,5 @@ jobs:
           environment_name: Celebring-docker-env
           version_label: github-action-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
-          deployment_package: deploy/deploy.zip
+          deployment_package: deploy/deploy-${{steps.current-time.outputs.formattedTime}}.zip
           wait_for_environment_recovery: 300
