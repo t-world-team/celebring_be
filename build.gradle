@@ -31,8 +31,6 @@ dependencies {
     
     //querydsl 추가
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-    implementation 'junit:junit:4.13.1'
-    implementation 'junit:junit:4.13.1'
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
@@ -46,10 +44,12 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 }
 
+test.onlyIf {
+    !project.hasProperty('test')
+}
+
 tasks.named('test') {
     useJUnitPlatform()
-//    scanForTestClasses = false
-//    include "**/*Test.class" // whatever Ant pattern matches your test class files
 }
 
 // === Querydsl 빌드 옵션 (선택사항) ===
