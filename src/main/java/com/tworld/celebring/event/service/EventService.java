@@ -35,7 +35,7 @@ public class EventService {
                 Stream.concat(upcomingList.stream(), pastList.stream()))
                 .collect(Collectors.toList());
 
-        List<EventListDto> content = (List<EventListDto>) PageIndex.getPage(eventList, page, size);
+        @SuppressWarnings("unchecked") List<EventListDto> content = (List<EventListDto>) PageIndex.getPage(eventList, page, size);
         Long count = eventRepository.findEventsCountByCeleb(celebId);
         return new PageImpl<>(content, PageRequest.of(page, size), count);
     }
