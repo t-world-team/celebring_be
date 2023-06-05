@@ -25,7 +25,7 @@ public class LoginService implements OAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2UserService oauthService = new DefaultOAuth2UserService();
+        OAuth2UserService<OAuth2UserRequest, OAuth2User> oauthService = new DefaultOAuth2UserService();
 
         // 서비스 이름 - google, naver, kakao
         String registrationId = userRequest.getClientRegistration().getRegistrationId();

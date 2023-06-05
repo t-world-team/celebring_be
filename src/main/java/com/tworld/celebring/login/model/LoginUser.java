@@ -16,6 +16,7 @@ public class LoginUser {
     private String name;
     private String email;
 
+    @SuppressWarnings("unchecked")
     public LoginUser(String userNameAttributeName, String service, Map<String, Object> attributes) {
         this.userNameAttributeName = userNameAttributeName;
         this.service = service;

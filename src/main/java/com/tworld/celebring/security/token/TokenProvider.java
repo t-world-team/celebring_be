@@ -48,6 +48,7 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
+    @SuppressWarnings("unchecked")
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)

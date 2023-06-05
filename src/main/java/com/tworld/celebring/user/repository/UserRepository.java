@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
-    User save(User user);
+public interface UserRepository extends JpaRepository<User, Long> {
+    @Override
+    <T extends User> T save(T user);
     Optional<User> findByOauthId(String oauthId);
 }

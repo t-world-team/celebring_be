@@ -26,6 +26,7 @@ public class SecurityConfig {
     private final TokenProvider tokenProvider;
 
     @Bean
+    @SuppressWarnings("unchecked")
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
