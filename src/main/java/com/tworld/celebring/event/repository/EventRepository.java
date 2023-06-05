@@ -41,14 +41,14 @@ public class EventRepository {
         return queryFactory
                 .selectFrom(e)
                 .where(Expressions.currentDate().between(e.startDate, e.endDate))
-                .fetchCount();
+                .fetch().size();
     }
 
     public long findEventsCountByCeleb(Long celebId) {
         return queryFactory
                 .selectFrom(e)
                 .where(e.celebId.eq(celebId))
-                .fetchCount();
+                .fetch().size();
     }
 
     public List<EventListDto> findCurrentEventsByCeleb(Long celebId) {
