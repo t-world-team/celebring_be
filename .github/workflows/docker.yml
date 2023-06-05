@@ -1,0 +1,66 @@
+name: Deploy main
+
+on:
+  push:
+    branches:
+      - docker  # 브랜치 선택
+  workflow_dispatch: # 수동 실행 옵션 (생략)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - uses: actions/checkout@v3
+      - run: touch ./src/main/resources/application-dev.properties
+      - run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application-dev.properties
+      - run: cat ./src/main/resources/application-dev.properties
+
+      - uses: actions/checkout@v3
+      - run: touch ./src/main/resources/application-oauth.properties
+      - run: echo "${{ secrets.APPLICATION_OAUTH }}" > ./src/main/resources/application-oauth.properties
+      - run: cat ./src/main/resources/application-oauth.properties
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Build with Gradle
+        run: ./gradlew clean build --debug
+        shell: bash
+
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYYMMDDTHHmm
+          utcOffset: "+09:00"
+
+      - name: Generate deployment package
+        run: |
+          mkdir -p deploy
+          cp build/libs/*.jar deploy/application.jar
+          cp Procfile deploy/Procfile
+          cp -r .ebextensions deploy/.ebextensions
+          cd deploy && zip -r deploy.zip .
+
+      - name: Deploy Consumer to EB
+        uses: einaregilsson/beanstalk-deploy@v21
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: elebring-docker
+          environment_name: Celebring-docker-env
+          version_label: github-action-${{steps.current-time.outputs.formattedTime}}
+          region: ap-northeast-2
+          deployment_package: deploy/deploy.zip
+          wait_for_environment_recovery: 300
