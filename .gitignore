@@ -39,3 +39,6 @@ out/
 ### Properties ###
 application-dev.properties
 application-*.*
+
+### QueryDSL ###
+src/main/generated
