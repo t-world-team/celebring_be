@@ -1,9 +1,11 @@
 {
   "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "679097072653.dkr.ecr.ap-northeast-2.amazonaws.com/celebring:latest"
+  },
   "Ports": [
     {
-      "ContainerPort": "8080"
+      "ContainerPort": 8080
     }
-  ],
-  "Logging": "/var/log/celebring"
+  ]
 }
