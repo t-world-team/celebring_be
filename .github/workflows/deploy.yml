@@ -35,7 +35,7 @@ jobs:
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew clean build --debug
+        run: ./gradlew clean build --debug -Xlint:unchecked
         shell: bash
 
       - name: Get current time
