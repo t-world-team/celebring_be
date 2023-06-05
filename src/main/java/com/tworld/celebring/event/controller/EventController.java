@@ -1,32 +1,58 @@
 package com.tworld.celebring.event.controller;
 
+import com.tworld.celebring.event.dto.EventListDto;
+import com.tworld.celebring.event.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "events", description = "이벤트 API")
-@RestController
 @RequestMapping("/events")
+@RestController
+@RequiredArgsConstructor
 public class EventController {
+    private final EventService eventService;
 
-    @Operation(summary = "test events", description = "swagger 테스트를 위한 api")
+    @Operation(summary = "get now event list", description = "현재 진행중인 이벤트 조회")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+            @ApiResponse(responseCode = "200", description = "OK")
     })
     @Parameters({
-            @Parameter(name = "id", description = "아이디", example = "1")
+            @Parameter(name = "page", description = "페이지 번호 (0번부터 시작)", example = "0", required = true),
+            @Parameter(name = "size", description = "한페이지에 나오는 개수", example = "10")
     })
-    @GetMapping("/test")
-    public String eventTest(@RequestParam(value = "id") String id) {
-        return "check event " + id;
+    @GetMapping("")
+    public ResponseEntity<?> getCurrentEventList(
+            @RequestParam(value = "page") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
+        Page<EventListDto> list = eventService.getCurrentEventList(PageRequest.of(page, size));  // page는 0부터 시작
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @Operation(summary = "celeb's event list", description = "셀럽의 이벤트 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK")
+    })
+    @Parameters({
+            @Parameter(name = "celebId", description = "셀럽 ID", example = "2", required = true),
+            @Parameter(name = "page", description = "페이지 번호 (0번부터 시작)", example = "0", required = true),
+            @Parameter(name = "size", description = "한페이지에 나오는 개수", example = "10")
+    })
+    @GetMapping("/{celebId}")
+    public ResponseEntity<?> getCelebEventList(
+            @PathVariable int celebId,
+            @RequestParam(value = "page") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
+        Page<EventListDto> list = eventService.getCelebEventList((long) celebId, page, size);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

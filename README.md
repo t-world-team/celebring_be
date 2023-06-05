@@ -13,6 +13,7 @@
 
 ### API 명세
 
+- http://celebring-api.ap-northeast-2.elasticbeanstalk.com/swagger-ui/index.html
 - http://localhost:8090/swagger-ui/index.html
 
 ### github branch 관리
