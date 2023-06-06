@@ -20,19 +20,10 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      ## create application.properties
       - uses: actions/checkout@v3
       - run: touch ./src/main/resources/application-dev.properties
       - run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application-dev.properties
-      - uses: actions/upload-artifact@v3
-        with:
-          name: application-dev.properties
-          path: ./src/main/resources/application-dev.properties
-
-      - uses: actions/checkout@v3
-      - run: touch ./src/main/resources/application-oauth.properties
-      - run: echo "${{ secrets.APPLICATION_OAUTH }}" > ./src/main/resources/application-oauth.properties
-      - run: cat ./src/main/resources/application-oauth.properties
+      - run: cat ./src/main/resources/application-dev.properties
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
@@ -42,7 +33,6 @@ jobs:
         run: ./gradlew clean build
         shell: bash
 
-#      추가
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -64,8 +54,6 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
-#       끝
 
       - name: Get current time
         uses: 1466587594/get-current-time@v2
