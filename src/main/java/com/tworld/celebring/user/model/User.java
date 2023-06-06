@@ -18,11 +18,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NonNull @Column(unique = true)
-    private String email;
-    @NonNull private String name;
-    private String imageUrl;
     @NonNull @Column(unique = true)
     private String oauthId;
     @NonNull private String role;
@@ -36,16 +31,9 @@ public class User {
     DeleteEntity deleteEntity;
 
     @Builder
-    public User(String oauthId, String name, String email) {
+    public User(String oauthId) {
         this.oauthId = oauthId;
-        this.name = name;
-        this.email = email;
         this.role = "ROLE_USER";
-    }
-
-    public void update(String name, String email) {
-        this.name = name;
-        this.email = email;
     }
 
 }

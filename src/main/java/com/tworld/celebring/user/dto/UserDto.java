@@ -7,17 +7,13 @@ import lombok.Data;
 public class UserDto {
     private Long id;
     private String oauthId;
-    private String name;
-    private String email;
 
-    public UserDto(Long id, String oauthId, String name, String email) {
+    public UserDto(Long id, String oauthId) {
         this.id = id;
         this.oauthId = oauthId;
-        this.name = name;
-        this.email = email;
     }
 
     public User toEntity() {
-        return User.builder().oauthId(oauthId).name(name).email(email).build();
+        return User.builder().oauthId(oauthId).build();
     }
 }

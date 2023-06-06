@@ -10,13 +10,10 @@ import java.util.Map;
 @Getter
 public class LoginUser {
 
-    private String userNameAttributeName;
-    private String service;
+    private final String userNameAttributeName;
+    private final String service;
     private String oAuthId;
-    private String name;
-    private String email;
 
-    @SuppressWarnings("unchecked")
     public LoginUser(String userNameAttributeName, String service, Map<String, Object> attributes) {
         this.userNameAttributeName = userNameAttributeName;
         this.service = service;
@@ -24,21 +21,14 @@ public class LoginUser {
         switch (service) {
             case "google" -> {
                 this.oAuthId = attributes.get("sub").toString();
-                this.name = attributes.get("name").toString();
-                this.email = attributes.get("email").toString();
             }
             case "naver" -> {
+                @SuppressWarnings("unchecked")
                 Map<String, Object> profile = (Map<String, Object>) attributes.get("response");
                 this.oAuthId = profile.get("id").toString();
-                this.name = profile.get("nickname").toString();
-                this.email = profile.get("email").toString();
             }
             case "kakao" -> {
-                Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
-                Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
                 this.oAuthId = attributes.get("id").toString();
-                this.name = properties.get("nickname").toString();
-                this.email = kakaoAccount.get("email").toString();
             }
         }
     }
@@ -48,13 +38,11 @@ public class LoginUser {
         userMap.put(user.getUserNameAttributeName(), user.getOAuthId());
         userMap.put("service", user.getService());
         userMap.put("id", user.getOAuthId());
-        userMap.put("name", user.getName());
-        userMap.put("email", user.getEmail());
         return userMap;
     }
 
     public static User convertToUser(LoginUser loginUser) {
-        return new UserDto(null, loginUser.getOAuthId(), loginUser.getName(), loginUser.getEmail()).toEntity();
+        return new UserDto(null, loginUser.getOAuthId()).toEntity();
     }
 
 }

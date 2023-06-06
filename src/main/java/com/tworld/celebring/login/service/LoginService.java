@@ -43,10 +43,6 @@ public class LoginService implements OAuth2UserService {
         if(userInfo == null) {
             // insert
             userInfo = saveUser(LoginUser.convertToUser(loginUser));
-        } else {
-            // update
-            userInfo.update(loginUser.getName(), loginUser.getEmail());
-            userInfo = saveUser(userInfo);
         }
 
         return new DefaultOAuth2User(
