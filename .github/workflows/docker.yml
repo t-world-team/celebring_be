@@ -58,7 +58,7 @@ jobs:
           IMAGE_TAG: latest
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGDISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
 #       끝
@@ -73,9 +73,8 @@ jobs:
       - name: Generate deployment package
         run: |
           mkdir -p deploy
-          cp -r .ebextensions deploy/.ebextensions
-          cp Dockerrun.aws.json deploy/Dockerrun.aws.json # Elastic Beanstalk에서 Docker 실행 시 체크하는 설정 파일
-          cd deploy && zip -r deploy-${{steps.current-time.outputs.formattedTime}}.zip .
+          cp Dockerrun.aws.json deploy/Dockerrun.aws.json
+          cd deploy && zip -r deploy.zip .
 
       - name: Deploy Consumer to EB
         uses: einaregilsson/beanstalk-deploy@v21
@@ -83,8 +82,8 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: celebring-docker
-          environment_name: Celebring-docker-env
+          environment_name: Celebring-docker-env-1
           version_label: github-action-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
-          deployment_package: deploy/deploy-${{steps.current-time.outputs.formattedTime}}.zip
+          deployment_package: deploy/deploy.zip
           wait_for_environment_recovery: 300
