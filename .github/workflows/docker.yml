@@ -20,10 +20,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - uses: actions/checkout@v3
-      - run: touch ./src/main/resources/application-dev.properties
-      - run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application-dev.properties
-      - run: cat ./src/main/resources/application-dev.properties
+      ## create application.properties
+      - name: make application.properties
+        run:
+          mkdir ./src/main/resources |
+          touch ./src/main/resources/application-dev.properties
+        shell: bash
+
+      - name: deliver application.properties
+        run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application-dev.properties
+        shell: bash
 
       - uses: actions/checkout@v3
       - run: touch ./src/main/resources/application-oauth.properties
