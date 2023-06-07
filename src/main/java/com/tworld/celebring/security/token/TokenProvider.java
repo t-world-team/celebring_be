@@ -25,6 +25,7 @@ public class TokenProvider implements InitializingBean {
     private final String secretKey = "celebring-secret-token-key";
 
     private final long ACCESS_TOKEN_EXPIRE_TIME = 60 * 60 * 3 * 1000; // 3시간
+
     @Override
     public void afterPropertiesSet() {
         this.key = Keys.hmacShaKeyFor(Base64.getEncoder().encodeToString(secretKey.getBytes()).getBytes());
@@ -33,17 +34,18 @@ public class TokenProvider implements InitializingBean {
     public String generateToken(Authentication authentication) {
         OAuth2User user = (OAuth2User) authentication.getPrincipal();
         Date now = new Date();
+        Date expire = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME);
 
         Claims claims = Jwts.claims();
         claims.put("auth", user.getAuthorities());
         claims.put("user", user.getAttributes());
-        claims.put("expire", new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME));
+        claims.put("expire", expire);
 
         return Jwts.builder()
                 .setSubject(user.getAuthorities().toString())
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME))
+                .setExpiration(expire)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
