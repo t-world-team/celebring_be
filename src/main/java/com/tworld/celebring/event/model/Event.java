@@ -18,7 +18,6 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull private Long celebId;
     @NonNull private String name;
     @NonNull @Temporal(TemporalType.DATE)
     private Date startDate;
@@ -28,7 +27,6 @@ public class Event {
     private String openingTime;
     private String sns;
     private String headerImageUrl;
-    private String mainImageUrl;
 
     @Embedded
     CreateEntity createEntity;
