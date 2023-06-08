@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tworld.celebring.event.dto.EventListDto;
 import com.tworld.celebring.event.dto.QEventListDto;
 import com.tworld.celebring.event.model.QEvent;
+import com.tworld.celebring.event.model.QEventCeleb;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,7 @@ public class EventRepository {
     private final JPAQueryFactory queryFactory;
 
     QEvent e = new QEvent("e");
+    QEventCeleb ec = new QEventCeleb("ec");
 
     public List<EventListDto> findCurrentEvents(Pageable pageable) {
         return queryFactory
@@ -27,7 +29,7 @@ public class EventRepository {
                         e.startDate,
                         e.endDate,
                         e.address,
-                        e.mainImageUrl
+                        e.imageUrl
                 ))
                 .from(e)
                 .where(Expressions.currentDate().between(e.startDate, e.endDate))
@@ -47,7 +49,7 @@ public class EventRepository {
     public long findEventsCountByCeleb(Long celebId) {
         return queryFactory
                 .selectFrom(e)
-                .where(e.celebId.eq(celebId))
+                .leftJoin(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
                 .fetch().size();
     }
 
@@ -59,13 +61,11 @@ public class EventRepository {
                         e.startDate,
                         e.endDate,
                         e.address,
-                        e.mainImageUrl
+                        e.imageUrl
                 ))
                 .from(e)
-                .where(
-                        e.celebId.eq(celebId)
-                                .and(Expressions.currentDate().between(e.startDate, e.endDate))
-                )
+                .leftJoin(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
+                .where(Expressions.currentDate().between(e.startDate, e.endDate))
                 .orderBy(e.startDate.asc())
                 .fetch();
     }
@@ -78,13 +78,11 @@ public class EventRepository {
                         e.startDate,
                         e.endDate,
                         e.address,
-                        e.mainImageUrl
+                        e.imageUrl
                 ))
                 .from(e)
-                .where(
-                        e.celebId.eq(celebId)
-                                .and(Expressions.currentDate().lt(e.startDate))
-                )
+                .leftJoin(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
+                .where(Expressions.currentDate().lt(e.startDate))
                 .orderBy(e.startDate.asc())
                 .fetch();
     }
@@ -97,13 +95,11 @@ public class EventRepository {
                         e.startDate,
                         e.endDate,
                         e.address,
-                        e.mainImageUrl
+                        e.imageUrl
                 ))
                 .from(e)
-                .where(
-                        e.celebId.eq(celebId)
-                                .and(Expressions.currentDate().gt(e.endDate))
-                )
+                .leftJoin(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
+                .where(Expressions.currentDate().gt(e.endDate))
                 .orderBy(e.endDate.asc())
                 .fetch();
     }
