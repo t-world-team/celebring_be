@@ -27,8 +27,10 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
 
-    @Embedded
-    DeleteEntity deleteEntity;
+    @Column(columnDefinition = "char")
+    private String deleteYn;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deleteAt;
 
     @Builder
     public User(String oauthId) {

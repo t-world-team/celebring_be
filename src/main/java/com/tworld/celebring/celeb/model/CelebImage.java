@@ -13,14 +13,7 @@ public class CelebImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Id
-    private Long celebId;
-
+    @NonNull private Long celebId;
     @NonNull private String imageUrl;
-
-    @Column(name = "type")
-    @Enumerated(EnumType.STRING)
-    private ImageType type;
-
-    private Integer seq;  // type = background 일때만 필요
+    @NonNull private Integer seq;
 }

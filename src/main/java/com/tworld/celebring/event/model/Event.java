@@ -23,10 +23,17 @@ public class Event {
     private Date startDate;
     @NonNull @Temporal(TemporalType.DATE)
     private Date endDate;
-    private String address;
-    private String openingTime;
-    private String sns;
-    private String headerImageUrl;
+
+    @NonNull private String openingTime;
+    @NonNull private String sns;
+    private String imageUrl;
+
+    @NonNull private String cafeName;
+    @NonNull private String address;
+    @NonNull @Column(name = "map_x")
+    private String mapX;
+    @NonNull @Column(name = "map_y")
+    private String mapY;
 
     @Embedded
     CreateEntity createEntity;

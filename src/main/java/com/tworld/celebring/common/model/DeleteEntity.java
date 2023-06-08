@@ -1,15 +1,16 @@
 package com.tworld.celebring.common.model;
 
-import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.NonNull;
 
 import java.util.Date;
 
 @Embeddable
 public class DeleteEntity {
+    @NonNull
     @Column(columnDefinition = "char")
     private String deleteYn;
 
