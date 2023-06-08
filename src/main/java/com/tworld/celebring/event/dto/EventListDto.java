@@ -11,15 +11,13 @@ public class EventListDto {
     private Date startDate;
     private Date endDate;
     private String address;
-    private String mainImageUrl;
 
     @QueryProjection
-    public EventListDto(Long id, String name, Date startDate, Date endDate, String address, String mainImageUrl) {
+    public EventListDto(Long id, String name, Date startDate, Date endDate, String address) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.address = address;
-        this.mainImageUrl = mainImageUrl;
     }
 }

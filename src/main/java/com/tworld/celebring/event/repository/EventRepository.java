@@ -28,8 +28,7 @@ public class EventRepository {
                         e.name,
                         e.startDate,
                         e.endDate,
-                        e.address,
-                        e.imageUrl
+                        e.address
                 ))
                 .from(e)
                 .where(Expressions.currentDate().between(e.startDate, e.endDate))
@@ -60,8 +59,7 @@ public class EventRepository {
                         e.name,
                         e.startDate,
                         e.endDate,
-                        e.address,
-                        e.imageUrl
+                        e.address
                 ))
                 .from(e)
                 .leftJoin(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
@@ -77,8 +75,7 @@ public class EventRepository {
                         e.name,
                         e.startDate,
                         e.endDate,
-                        e.address,
-                        e.imageUrl
+                        e.address
                 ))
                 .from(e)
                 .leftJoin(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
@@ -94,8 +91,7 @@ public class EventRepository {
                         e.name,
                         e.startDate,
                         e.endDate,
-                        e.address,
-                        e.imageUrl
+                        e.address
                 ))
                 .from(e)
                 .leftJoin(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
