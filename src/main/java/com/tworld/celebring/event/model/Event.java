@@ -18,17 +18,21 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull private Long celebId;
     @NonNull private String name;
     @NonNull @Temporal(TemporalType.DATE)
     private Date startDate;
     @NonNull @Temporal(TemporalType.DATE)
     private Date endDate;
-    private String address;
-    private String openingTime;
-    private String sns;
-    private String headerImageUrl;
-    private String mainImageUrl;
+
+    @NonNull private String cafeName;
+    @NonNull private String address;
+    @NonNull @Column(name = "map_x")
+    private String mapX;
+    @NonNull @Column(name = "map_y")
+    private String mapY;
+
+    @NonNull private String openingTime;
+    @NonNull private String sns;
 
     @Embedded
     CreateEntity createEntity;

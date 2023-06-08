@@ -24,7 +24,7 @@ public class Celeb {
     @NonNull @Temporal(TemporalType.DATE)
     private Date eventDate;
 
-    @NonNull private String imageUrl;
+    @NonNull private String profileImage;
 
     private String keywords;
 

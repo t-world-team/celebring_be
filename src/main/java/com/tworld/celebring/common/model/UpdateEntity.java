@@ -9,10 +9,8 @@ import java.util.Date;
 
 @Embeddable
 public class UpdateEntity {
-    @NonNull
     private Long updateBy;
 
-    @NonNull
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateAt;
 }
