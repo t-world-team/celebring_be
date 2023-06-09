@@ -13,7 +13,7 @@ public class EventLike {
     @Id
     private Long userId;
     @Id
-    private Long celebId;
+    private Long eventId;
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
 }
