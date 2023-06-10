@@ -38,9 +38,7 @@ public class EventRepositoryTest {
                         e.startDate,
                         e.endDate,
                         e.cafeName,
-                        e.address,
-                        e.mapX,
-                        e.mapY
+                        e.address
                 ))
                 .from(e)
                 .where(Expressions.currentDate().between(e.startDate, e.endDate))
@@ -96,9 +94,7 @@ public class EventRepositoryTest {
                         e.startDate,
                         e.endDate,
                         e.cafeName,
-                        e.address,
-                        e.mapX,
-                        e.mapY
+                        e.address
                 ))
                 .from(e)
                 .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
@@ -129,9 +125,7 @@ public class EventRepositoryTest {
                         e.startDate,
                         e.endDate,
                         e.cafeName,
-                        e.address,
-                        e.mapX,
-                        e.mapY
+                        e.address
                 ))
                 .from(e)
                 .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
@@ -161,9 +155,7 @@ public class EventRepositoryTest {
                         e.startDate,
                         e.endDate,
                         e.cafeName,
-                        e.address,
-                        e.mapX,
-                        e.mapY
+                        e.address
                 ))
                 .from(e)
                 .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
