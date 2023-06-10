@@ -1,9 +1,12 @@
 package com.tworld.celebring.event;
 
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.tworld.celebring.celeb.model.*;
 import com.tworld.celebring.event.dto.EventListDto;
 import com.tworld.celebring.event.dto.QEventListDto;
+import com.tworld.celebring.event.model.EventCeleb;
 import com.tworld.celebring.event.model.QEvent;
 import com.tworld.celebring.event.model.QEventCeleb;
 import jakarta.transaction.Transactional;
@@ -12,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -33,7 +37,10 @@ public class EventRepositoryTest {
                         e.name,
                         e.startDate,
                         e.endDate,
-                        e.address
+                        e.cafeName,
+                        e.address,
+                        e.mapX,
+                        e.mapY
                 ))
                 .from(e)
                 .where(Expressions.currentDate().between(e.startDate, e.endDate))
@@ -45,6 +52,32 @@ public class EventRepositoryTest {
 //        assertThat(events.size()).isEqualTo(2);
         for (EventListDto dto : events) {
             System.out.println(dto.getId() + " | " + dto.getName() + " | " + dto.getStartDate() + "~" + dto.getEndDate());
+        }
+    }
+
+    @Test
+    @DisplayName("이벤트의 셀럽 조회")
+    void howsEvent() {
+        QEventCeleb ec = new QEventCeleb("ec");
+        QViewCeleb vw = new QViewCeleb("vw");
+
+        Long searchEventId = 1l;
+
+        List<ViewCeleb> celebs = queryFactory
+                .select(vw)
+                .from(vw)
+                .where(vw.id.in(
+                        JPAExpressions
+                                .select(ec.celebId)
+                                .from(ec)
+                                .where(ec.eventId.eq(searchEventId))
+                ))
+                .fetch();
+
+        for (ViewCeleb a: celebs) {
+            String name = a.getName();
+            if (a.getGroupName() != null) name += "(" + a.getGroupName() + ")";
+            System.out.println(name);
         }
     }
 
@@ -62,10 +95,13 @@ public class EventRepositoryTest {
                         e.name,
                         e.startDate,
                         e.endDate,
-                        e.address
+                        e.cafeName,
+                        e.address,
+                        e.mapX,
+                        e.mapY
                 ))
                 .from(e)
-                .leftJoin(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
+                .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
                 .where(Expressions.currentDate().between(e.startDate, e.endDate))
                 .offset(0)  // 시작 인덱스
                 .limit(5)   // 개수
@@ -92,10 +128,13 @@ public class EventRepositoryTest {
                         e.name,
                         e.startDate,
                         e.endDate,
-                        e.address
+                        e.cafeName,
+                        e.address,
+                        e.mapX,
+                        e.mapY
                 ))
                 .from(e)
-                .leftJoin(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
+                .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
                 .where(Expressions.currentDate().lt(e.startDate))
                 .offset(0)  // 시작 인덱스
                 .limit(10)   // 개수
@@ -121,10 +160,13 @@ public class EventRepositoryTest {
                         e.name,
                         e.startDate,
                         e.endDate,
-                        e.address
+                        e.cafeName,
+                        e.address,
+                        e.mapX,
+                        e.mapY
                 ))
                 .from(e)
-                .leftJoin(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
+                .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
                 .where(Expressions.currentDate().gt(e.endDate))
                 .offset(0)  // 시작 인덱스
                 .limit(10)   // 개수
