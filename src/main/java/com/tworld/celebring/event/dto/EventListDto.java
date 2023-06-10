@@ -13,19 +13,15 @@ public class EventListDto {
     private Date endDate;
     private String cafeName;
     private String address;
-    private String mapX;
-    private String mapY;
     private List<String> celeb;
 
     @QueryProjection
-    public EventListDto(Long id, String name, Date startDate, Date endDate, String cafeName, String address, String mapX, String mapY) {
+    public EventListDto(Long id, String name, Date startDate, Date endDate, String cafeName, String address) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.cafeName = cafeName;
         this.address = address;
-        this.mapX = mapX;
-        this.mapY = mapY;
     }
 }

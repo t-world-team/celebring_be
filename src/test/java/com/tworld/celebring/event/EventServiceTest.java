@@ -37,9 +37,7 @@ public class EventServiceTest {
                         e.startDate,
                         e.endDate,
                         e.cafeName,
-                        e.address,
-                        e.mapX,
-                        e.mapY
+                        e.address
                 ))
                 .from(e)
                 .where(Expressions.currentDate().between(e.startDate, e.endDate))
