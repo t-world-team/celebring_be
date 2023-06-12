@@ -56,7 +56,7 @@ public class EventServiceTest {
                             JPAExpressions
                                     .select(ec.celebId)
                                     .from(ec)
-                                    .where(ec.eventId.eq(dto.getId()))
+                                    .where(ec.eventId.eq(dto.getEventId()))
                     ))
                     .fetch();
 
@@ -70,7 +70,7 @@ public class EventServiceTest {
 
         // 결과
         for (EventListDto dto : events) {
-            System.out.print(dto.getId() + " | " + dto.getName() + " | " );
+            System.out.print(dto.getEventId() + " | " + dto.getEventName() + " | " );
             for (String s: dto.getCeleb()) System.out.print(s + ", ");
             System.out.println();
         }

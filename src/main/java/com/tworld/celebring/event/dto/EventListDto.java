@@ -7,8 +7,8 @@ import java.util.List;
 
 @Data
 public class EventListDto {
-    private Long id;
-    private String name;
+    private Long eventId;
+    private String eventName;
     private Date startDate;
     private Date endDate;
     private String cafeName;
@@ -16,9 +16,9 @@ public class EventListDto {
     private List<String> celeb;
 
     @QueryProjection
-    public EventListDto(Long id, String name, Date startDate, Date endDate, String cafeName, String address) {
-        this.id = id;
-        this.name = name;
+    public EventListDto(Long eventId, String eventName, Date startDate, Date endDate, String cafeName, String address) {
+        this.eventId = eventId;
+        this.eventName = eventName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.cafeName = cafeName;
