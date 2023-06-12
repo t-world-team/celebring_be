@@ -6,10 +6,13 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tworld.celebring.celeb.model.QViewCeleb;
 import com.tworld.celebring.celeb.model.ViewCeleb;
+import com.tworld.celebring.event.dto.EventDetailDto;
 import com.tworld.celebring.event.dto.EventListDto;
+import com.tworld.celebring.event.dto.QEventDetailDto;
 import com.tworld.celebring.event.dto.QEventListDto;
 import com.tworld.celebring.event.model.QEvent;
 import com.tworld.celebring.event.model.QEventCeleb;
+import com.tworld.celebring.event.model.QEventLike;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -23,6 +26,7 @@ public class EventRepository {
 
     QEvent e = new QEvent("e");
     QEventCeleb ec = new QEventCeleb("ec");
+    QEventLike el = new QEventLike("el");
     QViewCeleb vw = new QViewCeleb("vw");
 
     public List<EventListDto> findCurrentEvents(Pageable pageable) {
@@ -119,5 +123,28 @@ public class EventRepository {
                                 .where(ec.eventId.eq(eventId))
                 ))
                 .fetch();
+    }
+
+    public EventDetailDto findEventDetail(Long eventId, Long userId) {
+        return queryFactory
+                .select(new QEventDetailDto(
+                        e.id,
+                        e.name,
+                        e.startDate,
+                        e.endDate,
+                        e.cafeName,
+                        e.address,
+                        e.mapX,
+                        e.mapY,
+                        e.openingTime,
+                        e.sns,
+                        (JPAExpressions.selectOne()
+                                .from(el)
+                                .where(el.userId.eq(userId)
+                                        .and(el.eventId.eq(e.id))))
+                ))
+                .from(e)
+                .where(e.id.eq(eventId))
+                .fetchOne();
     }
 }

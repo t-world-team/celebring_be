@@ -2,7 +2,9 @@ package com.tworld.celebring.event.service;
 
 import com.tworld.celebring.celeb.model.ViewCeleb;
 import com.tworld.celebring.common.dto.PageIndex;
+import com.tworld.celebring.event.dto.EventDetailDto;
 import com.tworld.celebring.event.dto.EventListDto;
+import com.tworld.celebring.event.model.Event;
 import com.tworld.celebring.event.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -73,6 +75,16 @@ public class EventService {
             }
             list.setCeleb(celebList);
         }
+    }
+
+    /**
+     * 이벤트 상세 정보
+     * @param eventId
+     * @param userId
+     * @return
+     */
+    public EventDetailDto getEventDetail(Long eventId, Long userId) {
+        return eventRepository.findEventDetail(eventId, userId);
     }
 
 }
