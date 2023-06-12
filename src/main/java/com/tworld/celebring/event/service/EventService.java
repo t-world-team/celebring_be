@@ -64,7 +64,7 @@ public class EventService {
      */
     private void getCelebList(List<EventListDto> content) {
         for (EventListDto list: content) {
-            List<ViewCeleb> viewCelebList = eventRepository.findCelebInfoByEvent(list.getId());
+            List<ViewCeleb> viewCelebList = eventRepository.findCelebInfoByEvent(list.getEventId());
             List<String> celebList = new ArrayList<>();
             for (ViewCeleb celeb: viewCelebList) {
                 String name = celeb.getName();

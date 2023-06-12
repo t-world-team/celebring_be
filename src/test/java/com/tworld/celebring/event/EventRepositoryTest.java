@@ -49,7 +49,7 @@ public class EventRepositoryTest {
 
 //        assertThat(events.size()).isEqualTo(2);
         for (EventListDto dto : events) {
-            System.out.println(dto.getId() + " | " + dto.getName() + " | " + dto.getStartDate() + "~" + dto.getEndDate());
+            System.out.println(dto.getEventId() + " | " + dto.getEventName() + " | " + dto.getStartDate() + "~" + dto.getEndDate());
         }
     }
 
@@ -106,7 +106,7 @@ public class EventRepositoryTest {
 
 //        assertThat(events.size()).isEqualTo(2);
         for (EventListDto dto : events) {
-            System.out.println(dto.getId() + " | " + dto.getName() + " | " + dto.getStartDate() + "~" + dto.getEndDate());
+            System.out.println(dto.getEventId() + " | " + dto.getEventName() + " | " + dto.getStartDate() + "~" + dto.getEndDate());
         }
     }
 
@@ -136,7 +136,7 @@ public class EventRepositoryTest {
                 .fetch();
 
         for (EventListDto dto : events) {
-            System.out.println(dto.getId() + " | " + dto.getName() + " | " + dto.getStartDate() + "~" + dto.getEndDate());
+            System.out.println(dto.getEventId() + " | " + dto.getEventName() + " | " + dto.getStartDate() + "~" + dto.getEndDate());
         }
     }
 
@@ -166,7 +166,7 @@ public class EventRepositoryTest {
                 .fetch();
 
         for (EventListDto dto : events) {
-            System.out.println(dto.getId() + " | " + dto.getName() + " | " + dto.getStartDate() + "~" + dto.getEndDate());
+            System.out.println(dto.getEventId() + " | " + dto.getEventName() + " | " + dto.getStartDate() + "~" + dto.getEndDate());
         }
     }
 }
