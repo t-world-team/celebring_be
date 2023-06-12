@@ -1,5 +1,6 @@
 package com.tworld.celebring.event.controller;
 
+import com.tworld.celebring.event.dto.EventDetailDto;
 import com.tworld.celebring.event.dto.EventListDto;
 import com.tworld.celebring.event.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,5 +56,19 @@ public class EventController {
             @RequestParam(value = "page") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
         Page<EventListDto> list = eventService.getCelebEventList((long) celebId, page, size);
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @Operation(summary = "event detail", description = "이벤트 상세 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK")
+    })
+    @Parameters({
+            @Parameter(name = "eventId", description = "이벤트 ID", example = "1", required = true),
+    })
+    @GetMapping("/detail/{eventId}")
+    public ResponseEntity<?> getEventDetail(@PathVariable Long eventId) {
+        Long userId = 1l;  // 로그인 정보를 사용하도록 변경해야 함
+        EventDetailDto content = eventService.getEventDetail(eventId, userId);
+        return new ResponseEntity<>(content, HttpStatus.OK);
     }
 }

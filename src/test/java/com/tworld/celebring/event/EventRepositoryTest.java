@@ -4,11 +4,14 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tworld.celebring.celeb.model.*;
+import com.tworld.celebring.event.dto.EventDetailDto;
 import com.tworld.celebring.event.dto.EventListDto;
+import com.tworld.celebring.event.dto.QEventDetailDto;
 import com.tworld.celebring.event.dto.QEventListDto;
 import com.tworld.celebring.event.model.EventCeleb;
 import com.tworld.celebring.event.model.QEvent;
 import com.tworld.celebring.event.model.QEventCeleb;
+import com.tworld.celebring.event.model.QEventLike;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -168,5 +171,57 @@ public class EventRepositoryTest {
         for (EventListDto dto : events) {
             System.out.println(dto.getEventId() + " | " + dto.getEventName() + " | " + dto.getStartDate() + "~" + dto.getEndDate());
         }
+    }
+
+    @Test
+    @DisplayName("이벤트 상세 조회")
+    public void EventDetail() {
+        Long searchUserId = 1l;
+        Long searchEventId = 2l;
+
+        QEvent e = new QEvent("e");
+        QEventLike el = new QEventLike("el");
+
+        EventDetailDto event = queryFactory
+                .select(new QEventDetailDto(
+                        e.id,
+                        e.name,
+                        e.startDate,
+                        e.endDate,
+                        e.cafeName,
+                        e.address,
+                        e.mapX,
+                        e.mapY,
+                        e.openingTime,
+                        e.sns,
+                        (JPAExpressions.selectOne()
+                                .from(el)
+                                .where(el.userId.eq(searchUserId)
+                                        .and(el.eventId.eq(e.id))))
+                ))
+                .from(e)
+                .where(e.id.eq(searchEventId))
+                .fetchOne();
+
+        System.out.println(event.getLiked());
+    }
+
+    @Test
+    @DisplayName("이벤트 좋아요 여부 조회")
+    public void EventDetailLike() {
+        Long searchUserId = 1l;
+        Long searchEventId = 1l;
+
+        QEvent e = new QEvent("e");
+        QEventLike el = new QEventLike("el");
+
+        int cnt = queryFactory
+                .select(el)
+                .from(el)
+                .where(el.eventId.eq(searchEventId)
+                        .and(el.userId.eq(searchUserId)))
+                .fetch().size();
+
+        System.out.println(cnt);
     }
 }
