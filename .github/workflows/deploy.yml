@@ -3,7 +3,7 @@ name: Deploy main
 on:
   push:
     branches:
-      - aws-test  # 브랜치 선택
+      - prod  # 브랜치 선택
   workflow_dispatch: # 수동 실행 옵션 (생략)
 
 jobs:
