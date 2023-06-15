@@ -27,7 +27,8 @@ import org.hibernate.annotations.Subselect;
         "        from celeb_link\n" +
         "        group by member_id\n" +
         "    ) cl\n" +
-        "    on c.id = cl.member_id")
+        "    on c.id = cl.member_id\n" +
+        "where c.delete_yn = 'N'")
 @Getter
 @NoArgsConstructor
 public class ViewCeleb {
