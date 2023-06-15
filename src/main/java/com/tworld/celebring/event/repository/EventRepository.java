@@ -40,7 +40,8 @@ public class EventRepository {
                         e.address
                 ))
                 .from(e)
-                .where(Expressions.currentDate().between(e.startDate, e.endDate))
+                .where(Expressions.currentDate().between(e.startDate, e.endDate)
+                        .and(e.deleteEntity.deleteYn.eq("N")))
                 .offset(pageable.getOffset())    // 시작 인덱스
                 .limit(pageable.getPageSize())   // 개수
                 .orderBy(e.startDate.asc())
@@ -50,14 +51,16 @@ public class EventRepository {
     public long findCurrentEventsCount() {
         return queryFactory
                 .selectFrom(e)
-                .where(Expressions.currentDate().between(e.startDate, e.endDate))
+                .where(Expressions.currentDate().between(e.startDate, e.endDate)
+                        .and(e.deleteEntity.deleteYn.eq("N")))
                 .fetch().size();
     }
 
     public long findEventsCountByCeleb(Long celebId) {
         return queryFactory
                 .selectFrom(e)
-                .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
+                .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId))
+                        .and(e.deleteEntity.deleteYn.eq("N")))
                 .fetch().size();
     }
 
@@ -73,7 +76,8 @@ public class EventRepository {
                 ))
                 .from(e)
                 .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
-                .where(Expressions.currentDate().between(e.startDate, e.endDate))
+                .where(Expressions.currentDate().between(e.startDate, e.endDate)
+                        .and(e.deleteEntity.deleteYn.eq("N")))
                 .orderBy(e.startDate.asc())
                 .fetch();
     }
@@ -90,7 +94,8 @@ public class EventRepository {
                 ))
                 .from(e)
                 .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
-                .where(Expressions.currentDate().lt(e.startDate))
+                .where(Expressions.currentDate().lt(e.startDate)
+                        .and(e.deleteEntity.deleteYn.eq("N")))
                 .orderBy(e.startDate.asc())
                 .fetch();
     }
@@ -107,7 +112,8 @@ public class EventRepository {
                 ))
                 .from(e)
                 .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
-                .where(Expressions.currentDate().gt(e.endDate))
+                .where(Expressions.currentDate().gt(e.endDate)
+                        .and(e.deleteEntity.deleteYn.eq("N")))
                 .orderBy(e.endDate.asc())
                 .fetch();
     }

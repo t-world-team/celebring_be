@@ -40,7 +40,8 @@ public class EventServiceTest {
                         e.address
                 ))
                 .from(e)
-                .where(Expressions.currentDate().between(e.startDate, e.endDate))
+                .where(Expressions.currentDate().between(e.startDate, e.endDate)
+                        .and(e.deleteEntity.deleteYn.eq("N")))
                 .offset(0)  // 시작 인덱스
                 .limit(5)   // 개수
                 .orderBy(e.startDate.asc())

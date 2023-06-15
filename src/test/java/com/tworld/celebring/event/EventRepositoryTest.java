@@ -44,7 +44,8 @@ public class EventRepositoryTest {
                         e.address
                 ))
                 .from(e)
-                .where(Expressions.currentDate().between(e.startDate, e.endDate))
+                .where(Expressions.currentDate().between(e.startDate, e.endDate)
+                        .and(e.deleteEntity.deleteYn.eq("N")))
                 .offset(0)  // 시작 인덱스
                 .limit(5)   // 개수
                 .orderBy(e.startDate.asc())
@@ -101,7 +102,8 @@ public class EventRepositoryTest {
                 ))
                 .from(e)
                 .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
-                .where(Expressions.currentDate().between(e.startDate, e.endDate))
+                .where(Expressions.currentDate().between(e.startDate, e.endDate)
+                        .and(e.deleteEntity.deleteYn.eq("N")))
                 .offset(0)  // 시작 인덱스
                 .limit(5)   // 개수
                 .orderBy(e.startDate.asc())
@@ -132,7 +134,8 @@ public class EventRepositoryTest {
                 ))
                 .from(e)
                 .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
-                .where(Expressions.currentDate().lt(e.startDate))
+                .where(Expressions.currentDate().lt(e.startDate)
+                        .and(e.deleteEntity.deleteYn.eq("N")))
                 .offset(0)  // 시작 인덱스
                 .limit(10)   // 개수
                 .orderBy(e.startDate.asc())
@@ -162,7 +165,8 @@ public class EventRepositoryTest {
                 ))
                 .from(e)
                 .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
-                .where(Expressions.currentDate().gt(e.endDate))
+                .where(Expressions.currentDate().gt(e.endDate)
+                        .and(e.deleteEntity.deleteYn.eq("N")))
                 .offset(0)  // 시작 인덱스
                 .limit(10)   // 개수
                 .orderBy(e.endDate.asc())
