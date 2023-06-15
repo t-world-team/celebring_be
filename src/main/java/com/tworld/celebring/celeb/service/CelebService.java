@@ -21,4 +21,15 @@ public class CelebService {
         List<CelebDto> celebDtoList = celebList.stream().map(celeb -> CelebDto.builder().celeb(celeb).build()).collect(Collectors.toList());
         return celebDtoList;
     }
+
+    public List<CelebDto> getGroupCelebListGroupingByConsonant(String startConsonant, String endConsonant) {
+        List<Celeb> celebList = celebRepository.findGroupCelebByConsonant("N", startConsonant, endConsonant);
+        List<CelebDto> celebDtoList = celebList.stream().map(celeb -> CelebDto.builder().celeb(celeb).build()).collect(Collectors.toList());
+        return celebDtoList;
+    }
+    public List<CelebDto> getSoloCelebListGroupingByConsonant(String startConsonant, String endConsonant) {
+        List<Celeb> celebList = celebRepository.findSoloCelebByConsonant("N", startConsonant, endConsonant);
+        List<CelebDto> celebDtoList = celebList.stream().map(celeb -> CelebDto.builder().celeb(celeb).build()).collect(Collectors.toList());
+        return celebDtoList;
+    }
 }
