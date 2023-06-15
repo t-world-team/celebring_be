@@ -34,4 +34,8 @@ public class Celeb {
     UpdateEntity updateEntity;
     @Embedded
     DeleteEntity deleteEntity;
+
+    @OneToOne
+    @JoinColumn(name = "id")
+    private CelebGroupName groupName;
 }
