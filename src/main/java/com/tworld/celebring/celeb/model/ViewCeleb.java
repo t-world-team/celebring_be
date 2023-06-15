@@ -9,11 +9,25 @@ import org.hibernate.annotations.Subselect;
 
 @Entity(name = "vw_celeb")
 @Immutable
-@Subselect("select c.id as id, c.name,  cl.group_id as group_id, (\n" +
-        "    select c.name from celeb c where c.id = group_id\n" +
-        "    ) as group_name\n" +
-        "from celeb c\n" +
-        "         left join celeb_link cl on c.id = cl.member_id")
+@Subselect("select\n" +
+        "    c.id as id,\n" +
+        "             c.name,\n" +
+        "             cl.group_id as group_id,\n" +
+        "             (         select\n" +
+        "                           c.name\n" +
+        "                       from\n" +
+        "                           celeb c\n" +
+        "                       where\n" +
+        "                               c.id = group_id     ) as group_name\n" +
+        "from\n" +
+        "    celeb c\n" +
+        "        left join\n" +
+        "    (\n" +
+        "        select *\n" +
+        "        from celeb_link\n" +
+        "        group by member_id\n" +
+        "    ) cl\n" +
+        "    on c.id = cl.member_id")
 @Getter
 @NoArgsConstructor
 public class ViewCeleb {
