@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -34,4 +35,12 @@ public class Celeb {
     UpdateEntity updateEntity;
     @Embedded
     DeleteEntity deleteEntity;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "groupId")
+    private List<CelebLink> memberLink;
+
+    @OneToOne
+    @JoinColumn(name = "id")
+    private CelebGroupName groupName;
 }

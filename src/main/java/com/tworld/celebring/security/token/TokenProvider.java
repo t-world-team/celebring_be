@@ -60,7 +60,7 @@ public class TokenProvider implements InitializingBean {
 
         Map<String, Object> user = (Map<String, Object>) claims.get("user");
 
-        User principal = new User(user.get("id").toString(), null, AuthorityUtils.createAuthorityList());
+        User principal = new User(user.get("id").toString(), user.get("service").toString(), AuthorityUtils.createAuthorityList());
 
         return new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
     }
