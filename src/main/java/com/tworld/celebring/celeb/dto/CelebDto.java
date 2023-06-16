@@ -13,6 +13,7 @@ public class CelebDto {
     private Date eventDate;
     private String profileImage;
     private String groupName;
+    private int like = 0;
 
     public CelebDto(Long id, String name, Date eventDate, String profileImage) {
         this.id = id;
@@ -22,7 +23,7 @@ public class CelebDto {
     }
 
     @Builder
-    public CelebDto(Celeb celeb) {
+    public CelebDto(Celeb celeb, int like) {
         this.id = celeb.getId();
         this.name = celeb.getName();
         this.eventDate = celeb.getEventDate();
@@ -30,5 +31,6 @@ public class CelebDto {
         if(celeb.getGroupName() != null) {
             this.groupName = celeb.getGroupName().getName();
         }
+        this.like = like;
     }
 }
