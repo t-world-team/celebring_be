@@ -50,7 +50,7 @@ public class LoginService implements OAuth2UserService {
         );
     }
 
-    private Optional<User> getUserInfoByOauthId(String oauthId) {
+    public Optional<User> getUserInfoByOauthId(String oauthId) {
         return userRepository.findByOauthId(oauthId);
     }
 

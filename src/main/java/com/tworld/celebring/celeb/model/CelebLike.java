@@ -4,9 +4,11 @@ import com.tworld.celebring.common.model.CreateEntity;
 import com.tworld.celebring.common.model.DeleteEntity;
 import com.tworld.celebring.common.model.UpdateEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -14,11 +16,16 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity(name = "celeb_like")
 public class CelebLike {
-    @Id
-    private Long userId;
-    @Id
-    private Long celebId;
+    @EmbeddedId
+    private CelebLikeId id;
 
-    @NonNull @Temporal(TemporalType.TIMESTAMP)
+    @NonNull
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
+
+    @Builder
+    public CelebLike(Long userId, Long celebId) {
+        this.id = CelebLikeId.builder().userId(userId).celebId(celebId).build();
+    }
 }

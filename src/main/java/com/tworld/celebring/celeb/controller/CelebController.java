@@ -3,19 +3,19 @@ package com.tworld.celebring.celeb.controller;
 import com.tworld.celebring.celeb.dto.CelebDto;
 import com.tworld.celebring.celeb.model.CelebSearch;
 import com.tworld.celebring.celeb.service.CelebService;
+import com.tworld.celebring.login.service.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Tag(name = "celeb", description = "셀럽 API")
 @RequestMapping("celeb")
@@ -24,6 +24,9 @@ public class CelebController {
 
     @Autowired
     private CelebService celebService;
+
+    @Autowired
+    private LoginService loginService;
 
     @Operation(summary = "get whole celeb list", description = "전체 셀럽 목록 조회")
     @GetMapping("list")
@@ -53,6 +56,50 @@ public class CelebController {
         list.put("group", groupList);
         list.put("solo", soloList);
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @Operation(summary = "add favorite celeb", description = "셀럽 좋아요(즐겨찾기) 추가")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED(권한 없음)")
+    })
+    @PostMapping("like")
+    public ResponseEntity<?> addFavoriteCeleb(@RequestBody Map<String, Long> paramMap, Authentication authentication) {
+
+        try {
+            User tokenUser = (User) authentication.getPrincipal();
+            Optional<com.tworld.celebring.user.model.User> userInfo = loginService.getUserInfoByOauthId(tokenUser.getUsername());
+
+            if(userInfo.isPresent()){
+                celebService.saveCelebLike(userInfo.get().getId(), paramMap.get("celebId"));
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Operation(summary = "delete favorite celeb", description = "셀럽 좋아요(즐겨찾기) 삭제")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED(권한 없음)")
+    })
+    @DeleteMapping("dislike")
+    public ResponseEntity<?> deleteFavoriteCeleb(@RequestBody Map<String, Long> paramMap, Authentication authentication) {
+
+        try {
+            User tokenUser = (User) authentication.getPrincipal();
+            Optional<com.tworld.celebring.user.model.User> userInfo = loginService.getUserInfoByOauthId(tokenUser.getUsername());
+
+            if(userInfo.isPresent()){
+                celebService.deleteCelebLike(userInfo.get().getId(), paramMap.get("celebId"));
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 
 }
