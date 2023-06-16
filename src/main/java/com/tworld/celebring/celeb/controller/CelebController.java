@@ -37,7 +37,15 @@ public class CelebController {
 
     @Operation(summary = "get celeb list grouping by group/solo, consonant", description = "그룹/솔로별, 초성별 셀럽 목록 조회")
     @GetMapping("list/consonant")
-    public ResponseEntity<?> getCelebListByConsonant() {
+    public ResponseEntity<?> getCelebListByConsonant(Authentication authentication) {
+
+        com.tworld.celebring.user.model.User user = null;
+        if(authentication != null) {
+            User tokenUser = (User) authentication.getPrincipal();
+            Optional<com.tworld.celebring.user.model.User> userInfo = loginService.getUserInfoByOauthId(tokenUser.getUsername());
+            user = userInfo.get();
+        }
+
         Map<String, Object> list = new HashMap<>();
         List<Map<String, Object>> groupList = new ArrayList<>();
         List<Map<String, Object>> soloList = new ArrayList<>();
@@ -45,12 +53,12 @@ public class CelebController {
             // group
             Map<String, Object> groupMap = new HashMap<>();
             groupMap.put("key", search.getConsonant());
-            groupMap.put("list", celebService.getGroupCelebListGroupingByConsonant(search.getStartConsonant(), search.getEndConsonant()));
+            groupMap.put("list", celebService.getGroupCelebListGroupingByConsonant(search.getStartConsonant(), search.getEndConsonant(), user));
             groupList.add(groupMap);
             // solo
             Map<String, Object> soloMap = new HashMap<>();
             soloMap.put("key", search.getConsonant());
-            soloMap.put("list", celebService.getSoloCelebListGroupingByConsonant(search.getStartConsonant(), search.getEndConsonant()));
+            soloMap.put("list", celebService.getSoloCelebListGroupingByConsonant(search.getStartConsonant(), search.getEndConsonant(), user));
             soloList.add(soloMap);
         }
         list.put("group", groupList);
