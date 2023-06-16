@@ -4,10 +4,12 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Data
 public class EventDetailDto {
-    private boolean liked;
+    private int liked;
 
     private Long eventId;
     private String eventName;
@@ -18,7 +20,7 @@ public class EventDetailDto {
     private String mapX;
     private String mapY;
     private String openingTime;
-    private String sns;
+    private String twitter;
 
     @QueryProjection
     public EventDetailDto(Long eventId, String eventName, Date startDate, Date endDate,
@@ -32,11 +34,18 @@ public class EventDetailDto {
         this.mapX = mapX;
         this.mapY = mapY;
         this.openingTime = openingTime;
-        this.sns = sns;
-        this.liked = liked == null ? false : true;
+        this.twitter = getTwitter(sns);
+        this.liked = liked == null ? 0 : 1;
     }
 
-    public boolean getLiked() {
+    public int getLiked() {
         return liked;
+    }
+
+    private String getTwitter(String url) {
+        Pattern urlPattern = Pattern.compile("^(https?):\\/\\/([^:\\/\\s]+)(:([^\\/]*))?((\\/[^\\s/\\/]+)*)?\\/([^#\\s\\?]*)(\\?([^#\\s]*))?(#(\\w*))?$");
+        Matcher m = urlPattern.matcher(url);
+        if (m.matches()) return m.group(7);
+        return null;
     }
 }
