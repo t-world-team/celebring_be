@@ -146,8 +146,8 @@ public class EventRepository {
                         e.sns,
                         (JPAExpressions.selectOne()
                                 .from(el)
-                                .where(el.userId.eq(userId)
-                                        .and(el.eventId.eq(e.id))))
+                                .where(el.id.userId.eq(userId)
+                                        .and(el.id.eventId.eq(e.id))))
                 ))
                 .from(e)
                 .where(e.id.eq(eventId))

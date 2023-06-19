@@ -10,10 +10,13 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity(name = "event_like")
 public class EventLike {
-    @Id
-    private Long userId;
-    @Id
-    private Long eventId;
+    @EmbeddedId
+    private EventLikeId id;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
+
+    public EventLike(Long userId, Long eventId) {
+        this.id = EventLikeId.builder().userId(userId).eventId(eventId).build();
+    }
 }

@@ -5,6 +5,9 @@ import com.tworld.celebring.common.dto.PageIndex;
 import com.tworld.celebring.event.dto.EventDetailDto;
 import com.tworld.celebring.event.dto.EventListDto;
 import com.tworld.celebring.event.model.Event;
+import com.tworld.celebring.event.model.EventLike;
+import com.tworld.celebring.event.model.EventLikeId;
+import com.tworld.celebring.event.repository.EventLikeRepository;
 import com.tworld.celebring.event.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +25,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
+    private final EventLikeRepository eventLikeRepository;
 
     /**
      * 현재 진행중인 이벤트 목록
@@ -85,6 +89,25 @@ public class EventService {
      */
     public EventDetailDto getEventDetail(Long eventId, Long userId) {
         return eventRepository.findEventDetail(eventId, userId);
+    }
+
+    /**
+     * 이벤트 좋아요
+     * @param userId
+     * @param eventId
+     * @return
+     */
+    public EventLike saveEventLike(Long userId, Long eventId) {
+        return eventLikeRepository.save(new EventLike(userId, eventId));
+    }
+
+    /**
+     * 이벤트 좋아요 취소
+     * @param userId
+     * @param eventId
+     */
+    public void delEventLike(Long userId, Long eventId) {
+        eventLikeRepository.delete(new EventLike(userId, eventId));
     }
 
 }
