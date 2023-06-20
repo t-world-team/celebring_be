@@ -200,8 +200,8 @@ public class EventRepositoryTest {
                         e.sns,
                         (JPAExpressions.selectOne()
                                 .from(el)
-                                .where(el.userId.eq(searchUserId)
-                                        .and(el.eventId.eq(e.id))))
+                                .where(el.id.userId.eq(searchUserId)
+                                        .and(el.id.eventId.eq(e.id))))
                 ))
                 .from(e)
                 .where(e.id.eq(searchEventId))
@@ -222,8 +222,8 @@ public class EventRepositoryTest {
         int cnt = queryFactory
                 .select(el)
                 .from(el)
-                .where(el.eventId.eq(searchEventId)
-                        .and(el.userId.eq(searchUserId)))
+                .where(el.id.eventId.eq(searchEventId)
+                        .and(el.id.userId.eq(searchUserId)))
                 .fetch().size();
 
         System.out.println(cnt);
