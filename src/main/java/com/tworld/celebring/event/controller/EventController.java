@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -128,6 +129,33 @@ public class EventController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Operation(summary = "delete event", description = "이벤트 삭제")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "BAD_REQUEST"),
+            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED(권한 없음)")
+    })
+    @Parameters({
+            @Parameter(name = "eventId", description = "이벤트 ID", example = "1", required = true),
+    })
+    @DeleteMapping("")
+    @Transactional
+    public ResponseEntity<?> deleteEvent(@RequestBody Map<String, Long> paramMap, Authentication authentication) {
+        try {
+            User tokenUser = (User) authentication.getPrincipal();
+            Optional<com.tworld.celebring.user.model.User> userInfo = loginService.getUserInfoByOauthId(tokenUser.getUsername());
+
+            if(userInfo.isPresent()) {
+                eventService.delEvent(paramMap.get("eventId"), userInfo.get().getId());
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            System.out.println(e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

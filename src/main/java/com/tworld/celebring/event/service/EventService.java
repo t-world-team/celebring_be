@@ -110,4 +110,13 @@ public class EventService {
         eventLikeRepository.delete(new EventLike(userId, eventId));
     }
 
+    /**
+     * 이벤트 삭제
+     * @param eventId
+     * @param userId
+     * @return
+     */
+    public Long delEvent(Long eventId, Long userId) {
+        return eventRepository.deleteEvent(eventId, userId);
+    }
 }

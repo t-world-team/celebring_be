@@ -1,6 +1,5 @@
 package com.tworld.celebring.event.repository;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -156,5 +156,16 @@ public class EventRepository {
                 .from(e)
                 .where(e.id.eq(eventId))
                 .fetchOne();
+    }
+
+
+    public Long deleteEvent(Long eventId, Long userId) {
+        return queryFactory
+                .update(e)
+                .set(e.deleteEntity.deleteYn, "Y")
+                .set(e.deleteEntity.deleteBy, userId)
+                .set(e.deleteEntity.deleteAt, Expressions.currentDate())
+                .where(e.id.eq(eventId))
+                .execute();
     }
 }
