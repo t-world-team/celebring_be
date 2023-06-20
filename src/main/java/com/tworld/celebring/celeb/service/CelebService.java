@@ -46,6 +46,11 @@ public class CelebService {
         return celebDtoList;
     }
 
+    public List<CelebDto> getFavoriteCelebByUserId(Long userId) {
+        List<Celeb> celebList = celebRepository.findAllByDeleteEntityDeleteYnAndLikesIdUserIdOrderByLikesCreateAtAsc("N", userId);
+        List<CelebDto> celebDtoList = celebList.stream().map(celeb -> CelebDto.builder().celeb(celeb).build()).collect(Collectors.toList());
+        return celebDtoList;
+    }
 
     public CelebLike saveCelebLike(Long userId, Long celebId) {
         return celebLikeRepository.save(CelebLike.builder().userId(userId).celebId(celebId).build());
