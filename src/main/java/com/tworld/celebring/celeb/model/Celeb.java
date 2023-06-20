@@ -43,4 +43,9 @@ public class Celeb {
     @OneToOne
     @JoinColumn(name = "id")
     private CelebGroupName groupName;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "celebId")
+    private List<CelebLike> likes;
+
 }

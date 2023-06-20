@@ -16,4 +16,6 @@ public interface CelebRepository extends JpaRepository<Celeb, Long> {
 
     @Query("select distinct c from celeb c left outer join c.memberLink m where c.deleteEntity.deleteYn = ?1 and lower(c.name) >= ?2 and lower(c.name) < ?3 and m.groupId is null")
     List<Celeb> findSoloCelebByConsonant(String deleteYn, String startConsonant, String endConsonant);
+
+    List<Celeb> findAllByDeleteEntityDeleteYnAndLikesIdUserIdOrderByLikesCreateAtAsc(String deleteYn, Long userId);
 }

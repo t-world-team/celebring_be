@@ -66,6 +66,24 @@ public class CelebController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @Operation(summary = "get favorite celeb list", description = "좋아요(즐겨찾기)한 셀럽 목록 조회")
+    @GetMapping("favorite")
+    public ResponseEntity<?> getFavoriteCelebList(Authentication authentication) {
+
+        try {
+            User tokenUser = (User) authentication.getPrincipal();
+            Optional<com.tworld.celebring.user.model.User> userInfo = loginService.getUserInfoByOauthId(tokenUser.getUsername());
+
+            if(userInfo.isPresent()){
+                List<CelebDto> list = celebService.getFavoriteCelebByUserId(userInfo.get().getId());
+                return new ResponseEntity<>(list, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     @Operation(summary = "add favorite celeb", description = "셀럽 좋아요(즐겨찾기) 추가")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
