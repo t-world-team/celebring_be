@@ -147,7 +147,11 @@ public class EventRepository {
                         (JPAExpressions.selectOne()
                                 .from(el)
                                 .where(el.id.userId.eq(userId)
-                                        .and(el.id.eventId.eq(e.id))))
+                                        .and(el.id.eventId.eq(e.id)))),
+                        (JPAExpressions.selectOne()
+                                .from(e)
+                                .where(e.createEntity.createBy.eq(userId)
+                                        .and(e.id.eq(eventId))))
                 ))
                 .from(e)
                 .where(e.id.eq(eventId))

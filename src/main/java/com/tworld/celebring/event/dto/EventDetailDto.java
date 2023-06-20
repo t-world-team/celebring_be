@@ -22,9 +22,11 @@ public class EventDetailDto {
     private String openingTime;
     private String twitter;
 
+    private int writer;
+
     @QueryProjection
     public EventDetailDto(Long eventId, String eventName, Date startDate, Date endDate,
-                          String cafeName, String address, String mapX, String mapY, String openingTime, String sns, Integer liked) {
+                          String cafeName, String address, String mapX, String mapY, String openingTime, String sns, Integer liked, Integer writer) {
         this.eventId = eventId;
         this.eventName = eventName;
         this.startDate = startDate;
@@ -36,6 +38,7 @@ public class EventDetailDto {
         this.openingTime = openingTime;
         this.twitter = getTwitter(sns);
         this.liked = liked == null ? 0 : 1;
+        this.writer = writer == null ? 0 : 1;
     }
 
     public int getLiked() {
