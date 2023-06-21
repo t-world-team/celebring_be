@@ -40,6 +40,10 @@ public class Celeb {
     @JoinColumn(name = "groupId")
     private List<CelebLink> memberLink;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId")
+    private List<CelebLink> subCeleb;
+
     @OneToOne
     @JoinColumn(name = "id")
     private CelebGroupName groupName;

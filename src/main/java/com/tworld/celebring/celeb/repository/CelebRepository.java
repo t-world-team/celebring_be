@@ -18,4 +18,6 @@ public interface CelebRepository extends JpaRepository<Celeb, Long> {
     List<Celeb> findSoloCelebByConsonant(String deleteYn, String startConsonant, String endConsonant);
 
     List<Celeb> findAllByDeleteEntityDeleteYnAndLikesIdUserIdOrderByLikesCreateAtAsc(String deleteYn, Long userId);
+
+    List<Celeb> findAllByDeleteEntityDeleteYnAndSubCelebGroupIdOrderByEventDate(String deleteYn, Long celebId);
 }

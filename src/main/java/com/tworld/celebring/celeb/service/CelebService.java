@@ -52,6 +52,15 @@ public class CelebService {
         return celebDtoList;
     }
 
+    public List<CelebDto> getSubCelebList(Long celebId, User user) {
+        List<Celeb> subCelebList = celebRepository.findAllByDeleteEntityDeleteYnAndSubCelebGroupIdOrderByEventDate("N", celebId);
+        List<CelebDto> celebDtoList = subCelebList.stream().map(celeb -> {
+            Optional<CelebLike> celebLike = user != null ? celebLikeRepository.findOneByIdCelebIdAndIdUserId(celeb.getId(), user.getId()) : null;
+            return CelebDto.builder().celeb(celeb).like(user == null || celebLike.isEmpty() ? 0 : 1).build();
+        }).collect(Collectors.toList());
+        return celebDtoList;
+    }
+
     public CelebLike saveCelebLike(Long userId, Long celebId) {
         return celebLikeRepository.save(CelebLike.builder().userId(userId).celebId(celebId).build());
     }

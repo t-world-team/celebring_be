@@ -84,6 +84,21 @@ public class CelebController {
         }
     }
 
+    @Operation(summary = "get sub celeb list", description = "하위 셀럽 목록 조회")
+    @GetMapping("sub")
+    public ResponseEntity<?> getSubCelebList(@RequestParam(value = "celebId") Long celebId, Authentication authentication) {
+
+        com.tworld.celebring.user.model.User user = null;
+        if(authentication != null) {
+            User tokenUser = (User) authentication.getPrincipal();
+            Optional<com.tworld.celebring.user.model.User> userInfo = loginService.getUserInfoByOauthId(tokenUser.getUsername());
+            user = userInfo.get();
+        }
+
+        List<CelebDto> list = celebService.getSubCelebList(celebId, user);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     @Operation(summary = "add favorite celeb", description = "셀럽 좋아요(즐겨찾기) 추가")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
