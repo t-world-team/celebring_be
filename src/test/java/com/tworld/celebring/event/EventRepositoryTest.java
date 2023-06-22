@@ -200,8 +200,12 @@ public class EventRepositoryTest {
                         e.sns,
                         (JPAExpressions.selectOne()
                                 .from(el)
-                                .where(el.userId.eq(searchUserId)
-                                        .and(el.eventId.eq(e.id))))
+                                .where(el.id.userId.eq(searchUserId)
+                                        .and(el.id.eventId.eq(e.id)))),
+                        (JPAExpressions.selectOne()
+                                .from(e)
+                                .where(e.createEntity.createBy.eq(searchUserId)
+                                        .and(e.id.eq(searchEventId))))
                 ))
                 .from(e)
                 .where(e.id.eq(searchEventId))
@@ -222,10 +226,29 @@ public class EventRepositoryTest {
         int cnt = queryFactory
                 .select(el)
                 .from(el)
-                .where(el.eventId.eq(searchEventId)
-                        .and(el.userId.eq(searchUserId)))
+                .where(el.id.eventId.eq(searchEventId)
+                        .and(el.id.userId.eq(searchUserId)))
                 .fetch().size();
 
         System.out.println(cnt);
+    }
+
+    @Test
+    @DisplayName("이벤트 삭제")
+    public void deleteEvent() {
+        QEvent e = new QEvent("e");
+
+        Long userId = 1l;
+        Long eventId = 1l;
+
+        Long result = queryFactory
+                    .update(e)
+                    .set(e.deleteEntity.deleteYn, "Y")
+                    .set(e.deleteEntity.deleteBy, userId)
+                    .set(e.deleteEntity.deleteAt, Expressions.currentDate())
+                    .where(e.id.eq(eventId))
+                    .execute();
+
+        System.out.println(result);
     }
 }
