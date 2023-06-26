@@ -1,10 +1,13 @@
 package com.tworld.celebring.celeb.controller;
 
 import com.tworld.celebring.celeb.dto.CelebDto;
+import com.tworld.celebring.celeb.dto.CelebInfoDto;
 import com.tworld.celebring.celeb.model.CelebSearch;
 import com.tworld.celebring.celeb.service.CelebService;
 import com.tworld.celebring.login.service.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -86,6 +89,9 @@ public class CelebController {
 
     @Operation(summary = "get sub celeb list", description = "하위 셀럽 목록 조회")
     @GetMapping("sub")
+    @Parameters({
+            @Parameter(name = "celebId", description = "셀럽 ID", example = "1", required = true)
+    })
     public ResponseEntity<?> getSubCelebList(@RequestParam(value = "celebId") Long celebId, Authentication authentication) {
 
         com.tworld.celebring.user.model.User user = null;
@@ -96,6 +102,16 @@ public class CelebController {
         }
 
         List<CelebDto> list = celebService.getSubCelebList(celebId, user);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @Operation(summary = "get celeb info and image list", description = "셀럽 상세 정보 및 이미지 목록 조회")
+    @GetMapping("{celebId}")
+    @Parameters({
+            @Parameter(name = "celebId", description = "셀럽 ID", example = "1", required = true)
+    })
+    public ResponseEntity<?> getCelebImageList(@PathVariable Long celebId) {
+        CelebInfoDto list = celebService.getCelebInfo(celebId);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
