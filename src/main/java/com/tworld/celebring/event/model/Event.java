@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.sql.Delete;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @Entity(name = "event")
+@DynamicUpdate
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,5 +62,20 @@ public class Event {
         this.sns = sns;
         this.createEntity = CreateEntity.builder().createBy(userId).createAt(LocalDateTime.now()).build();
         this.deleteEntity = DeleteEntity.builder().deleteYn("N").build();
+    }
+
+    public void update(String name, Date startDate, Date endDate,
+                       String cafeName, String address, String mapX, String mapY,
+                       String openingTime, String sns, Long userId) {
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.cafeName = cafeName;
+        this.address = address;
+        this.mapX = mapX;
+        this.mapY = mapY;
+        this.openingTime = openingTime;
+        this.sns = sns;
+//        this.updateEntity.bui
     }
 }

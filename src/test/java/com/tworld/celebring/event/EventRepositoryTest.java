@@ -70,9 +70,9 @@ public class EventRepositoryTest {
                 .from(vw)
                 .where(vw.id.in(
                         JPAExpressions
-                                .select(ec.celebId)
+                                .select(ec.id.celebId)
                                 .from(ec)
-                                .where(ec.eventId.eq(searchEventId))
+                                .where(ec.id.eventId.eq(searchEventId))
                 ))
                 .fetch();
 
@@ -101,7 +101,7 @@ public class EventRepositoryTest {
                         e.address
                 ))
                 .from(e)
-                .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
+                .join(ec).on(e.id.eq(ec.id.eventId).and(ec.id.celebId.eq(searchCelebId)))
                 .where(Expressions.currentDate().between(e.startDate, e.endDate)
                         .and(e.deleteEntity.deleteYn.eq("N")))
                 .offset(0)  // 시작 인덱스
@@ -133,7 +133,7 @@ public class EventRepositoryTest {
                         e.address
                 ))
                 .from(e)
-                .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
+                .join(ec).on(e.id.eq(ec.id.eventId).and(ec.id.celebId.eq(searchCelebId)))
                 .where(Expressions.currentDate().lt(e.startDate)
                         .and(e.deleteEntity.deleteYn.eq("N")))
                 .offset(0)  // 시작 인덱스
@@ -164,7 +164,7 @@ public class EventRepositoryTest {
                         e.address
                 ))
                 .from(e)
-                .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(searchCelebId)))
+                .join(ec).on(e.id.eq(ec.id.eventId).and(ec.id.celebId.eq(searchCelebId)))
                 .where(Expressions.currentDate().gt(e.endDate)
                         .and(e.deleteEntity.deleteYn.eq("N")))
                 .offset(0)  // 시작 인덱스

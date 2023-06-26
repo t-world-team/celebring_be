@@ -6,11 +6,15 @@ import com.tworld.celebring.common.model.CreateEntity;
 import com.tworld.celebring.event.dto.EventAddDto;
 import com.tworld.celebring.event.dto.EventDetailDto;
 import com.tworld.celebring.event.dto.EventListDto;
+import com.tworld.celebring.event.dto.EventUpdateDto;
 import com.tworld.celebring.event.model.Event;
+import com.tworld.celebring.event.model.EventCeleb;
 import com.tworld.celebring.event.model.EventLike;
+import com.tworld.celebring.event.repository.EventCelebRepository;
 import com.tworld.celebring.event.repository.EventJpaRepository;
 import com.tworld.celebring.event.repository.EventLikeRepository;
 import com.tworld.celebring.event.repository.EventRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,6 +37,7 @@ public class EventService {
     private final EventRepository eventRepository;
     private final EventJpaRepository eventJpaRepository;
     private final EventLikeRepository eventLikeRepository;
+    private final EventCelebRepository eventCelebRepository;
 
     /**
      * 현재 진행중인 이벤트 목록
@@ -141,6 +146,15 @@ public class EventService {
                 .userId(userId)
                 .build();
 
-        return eventJpaRepository.save(event);
+        event = eventJpaRepository.save(event);
+
+        EventCeleb ec = EventCeleb.builder()
+                .eventId(event.getId())
+                .celebId(dto.getCelebId())
+                .build();
+
+        eventCelebRepository.save(ec);
+
+        return event;
     }
 }

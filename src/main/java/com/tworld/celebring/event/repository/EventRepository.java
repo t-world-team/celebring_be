@@ -55,7 +55,7 @@ public class EventRepository {
     public long findEventsCountByCeleb(Long celebId) {
         return queryFactory
                 .selectFrom(e)
-                .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId))
+                .join(ec).on(e.id.eq(ec.id.eventId).and(ec.id.celebId.eq(celebId))
                         .and(e.deleteEntity.deleteYn.eq("N")))
                 .fetch().size();
     }
@@ -71,7 +71,7 @@ public class EventRepository {
                         e.address
                 ))
                 .from(e)
-                .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
+                .join(ec).on(e.id.eq(ec.id.eventId).and(ec.id.celebId.eq(celebId)))
                 .where(Expressions.currentDate().between(e.startDate, e.endDate)
                         .and(e.deleteEntity.deleteYn.eq("N")))
                 .orderBy(e.startDate.asc())
@@ -89,7 +89,7 @@ public class EventRepository {
                         e.address
                 ))
                 .from(e)
-                .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
+                .join(ec).on(e.id.eq(ec.id.eventId).and(ec.id.celebId.eq(celebId)))
                 .where(Expressions.currentDate().lt(e.startDate)
                         .and(e.deleteEntity.deleteYn.eq("N")))
                 .orderBy(e.startDate.asc())
@@ -107,7 +107,7 @@ public class EventRepository {
                         e.address
                 ))
                 .from(e)
-                .join(ec).on(e.id.eq(ec.eventId).and(ec.celebId.eq(celebId)))
+                .join(ec).on(e.id.eq(ec.id.eventId).and(ec.id.celebId.eq(celebId)))
                 .where(Expressions.currentDate().gt(e.endDate)
                         .and(e.deleteEntity.deleteYn.eq("N")))
                 .orderBy(e.endDate.asc())
@@ -120,9 +120,9 @@ public class EventRepository {
                 .from(vw)
                 .where(vw.id.in(
                         JPAExpressions
-                                .select(ec.celebId)
+                                .select(ec.id.celebId)
                                 .from(ec)
-                                .where(ec.eventId.eq(eventId))
+                                .where(ec.id.eventId.eq(eventId))
                 ))
                 .fetch();
     }

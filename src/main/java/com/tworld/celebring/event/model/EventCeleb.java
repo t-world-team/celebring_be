@@ -1,9 +1,7 @@
 package com.tworld.celebring.event.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -12,8 +10,11 @@ import lombok.NonNull;
 @NoArgsConstructor
 @Entity(name = "event_celeb")
 public class EventCeleb {
-    @Id
-    private Long eventId;
-    @Id
-    private Long celebId;
+    @EmbeddedId
+    private EventCelebId id;
+
+    @Builder
+    public EventCeleb(Long eventId, Long celebId) {
+        this.id = EventCelebId.builder().eventId(eventId).celebId(celebId).build();
+    }
 }
