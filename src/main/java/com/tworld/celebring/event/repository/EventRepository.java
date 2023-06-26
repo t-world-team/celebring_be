@@ -5,10 +5,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tworld.celebring.celeb.model.QViewCeleb;
 import com.tworld.celebring.celeb.model.ViewCeleb;
-import com.tworld.celebring.event.dto.EventDetailDto;
-import com.tworld.celebring.event.dto.EventListDto;
-import com.tworld.celebring.event.dto.QEventDetailDto;
-import com.tworld.celebring.event.dto.QEventListDto;
+import com.tworld.celebring.event.dto.*;
 import com.tworld.celebring.event.model.QEvent;
 import com.tworld.celebring.event.model.QEventCeleb;
 import com.tworld.celebring.event.model.QEventLike;
@@ -16,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 
 @Repository

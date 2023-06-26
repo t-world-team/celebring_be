@@ -2,11 +2,13 @@ package com.tworld.celebring.event.service;
 
 import com.tworld.celebring.celeb.model.ViewCeleb;
 import com.tworld.celebring.common.dto.PageIndex;
+import com.tworld.celebring.common.model.CreateEntity;
+import com.tworld.celebring.event.dto.EventAddDto;
 import com.tworld.celebring.event.dto.EventDetailDto;
 import com.tworld.celebring.event.dto.EventListDto;
 import com.tworld.celebring.event.model.Event;
 import com.tworld.celebring.event.model.EventLike;
-import com.tworld.celebring.event.model.EventLikeId;
+import com.tworld.celebring.event.repository.EventJpaRepository;
 import com.tworld.celebring.event.repository.EventLikeRepository;
 import com.tworld.celebring.event.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +31,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
+    private final EventJpaRepository eventJpaRepository;
     private final EventLikeRepository eventLikeRepository;
 
     /**
@@ -118,5 +125,22 @@ public class EventService {
      */
     public Long delEvent(Long eventId, Long userId) {
         return eventRepository.deleteEvent(eventId, userId);
+    }
+
+    public Event saveEvent(Long userId, EventAddDto dto) throws ParseException {
+        Event event = Event.builder()
+                .name(dto.getEventName())
+                .startDate(dto.getStartDate())
+                .endDate(dto.getEndDate())
+                .cafeName(dto.getCafeName())
+                .address(dto.getAddress())
+                .mapX(dto.getMapX())
+                .mapY(dto.getMapY())
+                .openingTime(dto.getOpeningTime())
+                .sns(dto.getTwitter())
+                .userId(userId)
+                .build();
+
+        return eventJpaRepository.save(event);
     }
 }
