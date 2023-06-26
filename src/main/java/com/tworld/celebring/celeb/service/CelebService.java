@@ -1,8 +1,12 @@
 package com.tworld.celebring.celeb.service;
 
 import com.tworld.celebring.celeb.dto.CelebDto;
+import com.tworld.celebring.celeb.dto.CelebImageDto;
+import com.tworld.celebring.celeb.dto.CelebInfoDto;
 import com.tworld.celebring.celeb.model.Celeb;
+import com.tworld.celebring.celeb.model.CelebImage;
 import com.tworld.celebring.celeb.model.CelebLike;
+import com.tworld.celebring.celeb.repository.CelebImageRepository;
 import com.tworld.celebring.celeb.repository.CelebLikeRepository;
 import com.tworld.celebring.celeb.repository.CelebRepository;
 import com.tworld.celebring.user.model.User;
@@ -22,6 +26,9 @@ public class CelebService {
 
     @Autowired
     private final CelebLikeRepository celebLikeRepository;
+
+    @Autowired
+    private final CelebImageRepository celebImageRepository;
 
     public List<CelebDto> getCelebList() {
         List<Celeb> celebList = celebRepository.findAllByDeleteEntityDeleteYn("N");
@@ -59,6 +66,26 @@ public class CelebService {
             return CelebDto.builder().celeb(celeb).like(user == null || celebLike.isEmpty() ? 0 : 1).build();
         }).collect(Collectors.toList());
         return celebDtoList;
+    }
+
+    public CelebInfoDto getCelebInfo(Long celebId) {
+        Optional<Celeb> celeb = celebRepository.findOneById(celebId);
+        if(celeb.isPresent()) {
+            return CelebInfoDto
+                    .builder()
+                    .name(celeb.get().getName())
+                    .eventDate(celeb.get().getEventDate())
+                    .imageList(getCelebImageList(celebId))
+                    .build();
+        } else {
+            return null;
+        }
+    }
+
+    public List<CelebImageDto> getCelebImageList(Long celebId) {
+        List<CelebImage> imageList = celebImageRepository.findAllByCelebIdOrderBySeqDesc(celebId);
+        List<CelebImageDto> imageDtoList = imageList.stream().map(image -> CelebImageDto.builder().imageUrl(image.getImageUrl()).seq(image.getSeq()).build()).collect(Collectors.toList());
+        return imageDtoList;
     }
 
     public CelebLike saveCelebLike(Long userId, Long celebId) {

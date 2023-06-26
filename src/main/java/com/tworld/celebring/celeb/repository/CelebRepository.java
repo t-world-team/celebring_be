@@ -6,9 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CelebRepository extends JpaRepository<Celeb, Long> {
+
+    Optional<Celeb> findOneById(Long id);
+
     List<Celeb> findAllByDeleteEntityDeleteYn(String deleteYn);
 
     @Query("select distinct c from celeb c inner join c.memberLink where c.deleteEntity.deleteYn = ?1 and lower(c.name) >= ?2 and lower(c.name) < ?3 order by c.name")
