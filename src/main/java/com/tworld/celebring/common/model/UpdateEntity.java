@@ -7,6 +7,7 @@ import jakarta.persistence.TemporalType;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Embeddable
@@ -15,10 +16,10 @@ public class UpdateEntity {
     private Long updateBy;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date updateAt;
+    private LocalDateTime updateAt;
 
     @Builder
-    public UpdateEntity(Long updateBy, Date updateAt) {
+    public UpdateEntity(Long updateBy, LocalDateTime updateAt) {
         this.updateBy = updateBy;
         this.updateAt = updateAt;
     }

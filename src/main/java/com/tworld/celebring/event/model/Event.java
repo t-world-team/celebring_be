@@ -3,6 +3,7 @@ package com.tworld.celebring.event.model;
 import com.tworld.celebring.common.model.CreateEntity;
 import com.tworld.celebring.common.model.DeleteEntity;
 import com.tworld.celebring.common.model.UpdateEntity;
+import com.tworld.celebring.event.dto.EventUpdateDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -64,18 +65,16 @@ public class Event {
         this.deleteEntity = DeleteEntity.builder().deleteYn("N").build();
     }
 
-    public void update(String name, Date startDate, Date endDate,
-                       String cafeName, String address, String mapX, String mapY,
-                       String openingTime, String sns, Long userId) {
-        this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.cafeName = cafeName;
-        this.address = address;
-        this.mapX = mapX;
-        this.mapY = mapY;
-        this.openingTime = openingTime;
-        this.sns = sns;
-//        this.updateEntity.bui
+    public void update(EventUpdateDto dto, Long userId) {
+        this.name = dto.getName();
+        this.startDate = dto.getStartDate();
+        this.endDate = dto.getEndDate();
+        this.cafeName = dto.getCafeName();
+        this.address = dto.getAddress();
+        this.mapX = dto.getMapX();
+        this.mapY = dto.getMapY();
+        this.openingTime = dto.getOpeningTime();
+        this.sns = dto.getSns();
+        this.updateEntity = UpdateEntity.builder().updateBy(userId).updateAt(LocalDateTime.now()).build();
     }
 }

@@ -157,4 +157,13 @@ public class EventService {
 
         return event;
     }
+
+    @Transactional
+    public Event updateEvent(Long userId, EventUpdateDto dto) {
+        Event event = eventJpaRepository.findById(dto.getId()).orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 이벤트입니다."));
+
+        event.update(dto, userId);
+        return eventJpaRepository.save(event);
+    }
 }
