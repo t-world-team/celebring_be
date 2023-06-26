@@ -1,7 +1,9 @@
 package com.tworld.celebring.event.controller;
 
+import com.tworld.celebring.event.dto.EventAddDto;
 import com.tworld.celebring.event.dto.EventDetailDto;
 import com.tworld.celebring.event.dto.EventListDto;
+import com.tworld.celebring.event.dto.EventUpdateDto;
 import com.tworld.celebring.event.model.EventLike;
 import com.tworld.celebring.event.service.EventService;
 import com.tworld.celebring.login.service.LoginService;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -150,6 +153,54 @@ public class EventController {
 
             if(userInfo.isPresent()) {
                 eventService.delEvent(paramMap.get("eventId"), userInfo.get().getId());
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            System.out.println(e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Operation(summary = "add event", description = "이벤트 등록")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "BAD_REQUEST"),
+            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED(권한 없음)")
+    })
+    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity<?> addEvent(@RequestBody EventAddDto eventAddDto, Authentication authentication) {
+        try {
+            User tokenUser = (User) authentication.getPrincipal();
+            Optional<com.tworld.celebring.user.model.User> userInfo = loginService.getUserInfoByOauthId(tokenUser.getUsername());
+
+            if(userInfo.isPresent()) {
+                eventService.saveEvent(userInfo.get().getId(), eventAddDto);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            System.out.println(e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Operation(summary = "update event", description = "이벤트 수정")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "BAD_REQUEST"),
+            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED(권한 없음)")
+    })
+    @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity<?> updateEvent(@RequestBody EventUpdateDto eventUpdateDto, Authentication authentication) {
+        try {
+            User tokenUser = (User) authentication.getPrincipal();
+            Optional<com.tworld.celebring.user.model.User> userInfo = loginService.getUserInfoByOauthId(tokenUser.getUsername());
+
+            if(userInfo.isPresent()) {
+                eventService.updateEvent(userInfo.get().getId(), eventUpdateDto);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

@@ -55,9 +55,9 @@ public class EventServiceTest {
                     .from(vw)
                     .where(vw.id.in(
                             JPAExpressions
-                                    .select(ec.celebId)
+                                    .select(ec.id.celebId)
                                     .from(ec)
-                                    .where(ec.eventId.eq(dto.getEventId()))
+                                    .where(ec.id.eventId.eq(dto.getEventId()))
                     ))
                     .fetch();
 
