@@ -33,9 +33,9 @@ public class Event {
     @NonNull private String cafeName;
     @NonNull private String address;
     @NonNull @Column(name = "map_x")
-    private String mapX;
+    private String mapX;           // 경도
     @NonNull @Column(name = "map_y")
-    private String mapY;
+    private String mapY;           // 위도
 
     @NonNull private String openingTime;
     @NonNull private String sns;

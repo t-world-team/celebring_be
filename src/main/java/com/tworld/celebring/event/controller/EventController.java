@@ -176,8 +176,8 @@ public class EventController {
             Optional<com.tworld.celebring.user.model.User> userInfo = loginService.getUserInfoByOauthId(tokenUser.getUsername());
 
             if(userInfo.isPresent()) {
-                eventService.saveEvent(userInfo.get().getId(), eventAddDto);
-                return new ResponseEntity<>(HttpStatus.OK);
+                Long savedEventId = eventService.saveEvent(userInfo.get().getId(), eventAddDto);
+                return new ResponseEntity<>(savedEventId, HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {

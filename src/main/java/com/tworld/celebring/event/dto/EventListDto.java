@@ -14,6 +14,7 @@ public class EventListDto {
     private String cafeName;
     private String address;
     private List<String> celeb;
+    private List<String> thumbnail;
 
     @QueryProjection
     public EventListDto(Long eventId, String eventName, Date startDate, Date endDate, String cafeName, String address) {
@@ -23,5 +24,10 @@ public class EventListDto {
         this.endDate = endDate;
         this.cafeName = cafeName;
         this.address = address;
+    }
+
+    public void setCeleb(List<String> celeb, List<String> thumbnail) {
+        this.celeb = celeb;
+        this.thumbnail = thumbnail;
     }
 }

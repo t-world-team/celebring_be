@@ -3,10 +3,11 @@ package com.tworld.celebring.event.dto;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class EventAddDto {
-    private Long celebId;
+    private List<Long> celebId;
     private String eventName;
     private Date startDate;
     private Date endDate;
