@@ -168,4 +168,18 @@ public class EventService {
         event.update(dto, userId);
         return eventJpaRepository.save(event);
     }
+
+    /**
+     * 등록한 이벤트 목록
+     * @param userId
+     * @param pageable
+     * @return
+     */
+    public Page<EventListDto> getMyEventList(Long userId, Pageable pageable) {
+        List<EventListDto> content = eventRepository.findMyEventList(userId, pageable);
+        getCelebList(content);
+
+        Long count = eventRepository.findMyEventsCount(userId);
+        return new PageImpl<>(content, pageable, count);
+    }
 }

@@ -20,7 +20,8 @@ public class EventDetailDto {
     private String mapX;
     private String mapY;
     private String openingTime;
-    private String twitter;
+    private String twitterId;
+    private String twitterUrl;
 
     private int writer;
 
@@ -36,7 +37,8 @@ public class EventDetailDto {
         this.mapX = mapX;
         this.mapY = mapY;
         this.openingTime = openingTime;
-        this.twitter = getTwitter(sns);
+        this.twitterId = getTwitter(sns);
+        this.twitterUrl = sns;
         this.liked = liked == null ? 0 : 1;
         this.writer = writer == null ? 0 : 1;
     }
