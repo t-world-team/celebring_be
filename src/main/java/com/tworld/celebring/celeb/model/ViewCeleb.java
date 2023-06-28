@@ -18,7 +18,8 @@ import org.hibernate.annotations.Subselect;
         "                       from\n" +
         "                           celeb c\n" +
         "                       where\n" +
-        "                               c.id = group_id     ) as group_name\n" +
+        "                               c.id = group_id     ) as group_name, \n" +
+        "              c.profile_image\n" +
         "from\n" +
         "    celeb c\n" +
         "        left join\n" +
@@ -37,4 +38,5 @@ public class ViewCeleb {
     private String name;
     private Long groupId;
     private String groupName;
+    private String profileImage;
 }

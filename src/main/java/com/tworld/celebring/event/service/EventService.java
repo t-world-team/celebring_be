@@ -84,12 +84,14 @@ public class EventService {
         for (EventListDto list: content) {
             List<ViewCeleb> viewCelebList = eventRepository.findCelebInfoByEvent(list.getEventId());
             List<String> celebList = new ArrayList<>();
+            List<String> imgList = new ArrayList<>();
             for (ViewCeleb celeb: viewCelebList) {
                 String name = celeb.getName();
                 if (celeb.getGroupId() != null) name += "(" + celeb.getGroupName() + ")";
                 celebList.add(name);
+                imgList.add(celeb.getProfileImage());
             }
-            list.setCeleb(celebList);
+            list.setCeleb(celebList, imgList);
         }
     }
 
