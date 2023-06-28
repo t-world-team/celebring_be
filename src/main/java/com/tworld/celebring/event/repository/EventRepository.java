@@ -164,4 +164,31 @@ public class EventRepository {
                 .where(e.id.eq(eventId))
                 .execute();
     }
+
+    public List<EventListDto> findMyEventList(Long userId, Pageable pageable) {
+        return queryFactory
+                .select(new QEventListDto(
+                        e.id,
+                        e.name,
+                        e.startDate,
+                        e.endDate,
+                        e.cafeName,
+                        e.address
+                ))
+                .from(e)
+                .where(e.createEntity.createBy.eq(userId)
+                        .and(e.deleteEntity.deleteYn.eq("N")))
+                .offset(pageable.getOffset())    // 시작 인덱스
+                .limit(pageable.getPageSize())   // 개수
+                .orderBy(e.id.desc())
+                .fetch();
+    }
+
+    public long findMyEventsCount(Long userId) {
+        return queryFactory
+                .selectFrom(e)
+                .where(e.createEntity.createBy.eq(userId)
+                        .and(e.deleteEntity.deleteYn.eq("N")))
+                .fetch().size();
+    }
 }
