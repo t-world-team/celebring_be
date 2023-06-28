@@ -4,16 +4,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Collections;
 
 @Tag(name = "util", description = "공통 기능 API")
 @RestController
@@ -45,9 +41,10 @@ public class UtilController {
         header.add("X-Naver-Client-Id", NAVER_CLIENT_ID);
         header.add("X-Naver-Client-Secret", NAVER_CLIENT_SECRET);
 
-        HttpEntity httpEntity = new HttpEntity(header);
+        HttpEntity<?> httpEntity = new HttpEntity<HttpHeaders>(header);
 
-        ResponseEntity<String> response = restTemplate.exchange(openapiUrl, HttpMethod.GET, httpEntity, String.class);
+        ResponseEntity<String> response;
+        response = restTemplate.exchange(openapiUrl, HttpMethod.GET, httpEntity, String.class);
 
         return response;
     }
