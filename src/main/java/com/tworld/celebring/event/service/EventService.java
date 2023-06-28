@@ -134,7 +134,7 @@ public class EventService {
         return eventRepository.deleteEvent(eventId, userId);
     }
 
-    public Event saveEvent(Long userId, EventAddDto dto) throws ParseException {
+    public Long saveEvent(Long userId, EventAddDto dto) throws ParseException {
         Event event = Event.builder()
                 .name(dto.getEventName())
                 .startDate(dto.getStartDate())
@@ -150,14 +150,14 @@ public class EventService {
 
         event = eventJpaRepository.save(event);
 
-        EventCeleb ec = EventCeleb.builder()
-                .eventId(event.getId())
-                .celebId(dto.getCelebId())
-                .build();
-
-        eventCelebRepository.save(ec);
-
-        return event;
+        for (Long celebId: dto.getCelebId()) {
+            EventCeleb ec = EventCeleb.builder()
+                    .eventId(event.getId())
+                    .celebId(celebId)
+                    .build();
+            eventCelebRepository.save(ec);
+        }
+        return event.getId();
     }
 
     @Transactional
