@@ -110,7 +110,7 @@ public class EventRepository {
                 .join(ec).on(e.id.eq(ec.id.eventId).and(ec.id.celebId.eq(celebId)))
                 .where(Expressions.currentDate().gt(e.endDate)
                         .and(e.deleteEntity.deleteYn.eq("N")))
-                .orderBy(e.endDate.asc())
+                .orderBy(e.startDate.desc(), e.endDate.desc())
                 .fetch();
     }
 
@@ -190,5 +190,28 @@ public class EventRepository {
                 .where(e.createEntity.createBy.eq(userId)
                         .and(e.deleteEntity.deleteYn.eq("N")))
                 .fetch().size();
+    }
+
+    public List<EventListDto> findFavoriteEventList(Long userId, Pageable pageable) {
+        return queryFactory
+                .select(new QEventListDto(
+                        e.id,
+                        e.name,
+                        e.startDate,
+                        e.endDate,
+                        e.cafeName,
+                        e.address
+                ))
+                .from(e)
+                .where(e.id.in(
+                                JPAExpressions.select(el.id.eventId)
+                                        .from(el)
+                                        .where(el.id.userId.eq(userId))
+                        )
+                        .and(e.deleteEntity.deleteYn.eq("N")))
+                .offset(pageable.getOffset())    // 시작 인덱스
+                .limit(pageable.getPageSize())   // 개수
+                .orderBy(e.id.desc())
+                .fetch();
     }
 }

@@ -4,24 +4,15 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tworld.celebring.celeb.model.*;
-import com.tworld.celebring.event.dto.EventDetailDto;
-import com.tworld.celebring.event.dto.EventListDto;
-import com.tworld.celebring.event.dto.QEventDetailDto;
-import com.tworld.celebring.event.dto.QEventListDto;
-import com.tworld.celebring.event.model.EventCeleb;
-import com.tworld.celebring.event.model.QEvent;
-import com.tworld.celebring.event.model.QEventCeleb;
-import com.tworld.celebring.event.model.QEventLike;
+import com.tworld.celebring.event.dto.*;
+import com.tworld.celebring.event.model.*;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -149,7 +140,7 @@ public class EventRepositoryTest {
     @Test
     @DisplayName("셀럽의 지난 이벤트 목록")
     void pastEventByCeleb() {
-        Long searchCelebId = 2l;
+        Long searchCelebId = 1l;
 
         QEvent e = new QEvent("e");
         QEventCeleb ec = new QEventCeleb("ec");
@@ -169,7 +160,7 @@ public class EventRepositoryTest {
                         .and(e.deleteEntity.deleteYn.eq("N")))
                 .offset(0)  // 시작 인덱스
                 .limit(10)   // 개수
-                .orderBy(e.endDate.asc())
+                .orderBy(e.startDate.desc(), e.endDate.desc())
                 .fetch();
 
         for (EventListDto dto : events) {
@@ -250,5 +241,37 @@ public class EventRepositoryTest {
                     .execute();
 
         System.out.println(result);
+    }
+
+    @Test
+    @DisplayName("좋아요한 이벤트")
+    public void favoriteEvent() {
+        QEvent e = new QEvent("e");
+        QEventLike el = new QEventLike("el");
+
+        Long userId = 2l;
+
+        List<EventListDto> result = queryFactory
+                .select(new QEventListDto(
+                        e.id,
+                        e.name,
+                        e.startDate,
+                        e.endDate,
+                        e.cafeName,
+                        e.address
+                ))
+                .from(e)
+                .where(e.id.in(
+                        JPAExpressions.select(el.id.eventId)
+                                .from(el)
+                                .where(el.id.userId.eq(userId))
+                )
+                        .and(e.deleteEntity.deleteYn.eq("N")))
+                .orderBy(e.id.desc())
+                .fetch();
+
+        for (EventListDto dto: result) {
+            System.out.println(dto.getEventId() + " : " + dto.getEventName());
+        }
     }
 }
