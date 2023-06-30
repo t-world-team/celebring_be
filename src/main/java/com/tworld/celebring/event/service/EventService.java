@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -102,7 +103,19 @@ public class EventService {
      * @return
      */
     public EventDetailDto getEventDetail(Long eventId, Long userId) {
-        return eventRepository.findEventDetail(eventId, userId);
+        EventDetailDto content = eventRepository.findEventDetail(eventId, userId);
+
+        // 셀럽 정보
+        List<ViewCeleb> viewCelebList = eventRepository.findCelebInfoByEvent(content.getEventId());
+        List<String> celebList = new ArrayList<>();
+        for (ViewCeleb celeb: viewCelebList) {
+            String name = celeb.getName();
+            if (celeb.getGroupId() != null) name += "(" + celeb.getGroupName() + ")";
+            celebList.add(name);
+        }
+        content.setCeleb(celebList);
+
+        return content;
     }
 
     /**
