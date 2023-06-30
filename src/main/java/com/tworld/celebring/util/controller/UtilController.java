@@ -37,11 +37,11 @@ public class UtilController {
         openapiUrl += "?query=" + query + "&display=5";
 
         HttpHeaders header = new HttpHeaders();
-        header.setContentType(MediaType.APPLICATION_JSON);
+        header.setContentType(MediaType.TEXT_PLAIN);
         header.add("X-Naver-Client-Id", NAVER_CLIENT_ID);
         header.add("X-Naver-Client-Secret", NAVER_CLIENT_SECRET);
 
-        HttpEntity<?> httpEntity = new HttpEntity<HttpHeaders>(header);
+        HttpEntity<?> httpEntity = new HttpEntity<>(header);
 
         ResponseEntity<String> response;
         response = restTemplate.exchange(openapiUrl, HttpMethod.GET, httpEntity, String.class);
