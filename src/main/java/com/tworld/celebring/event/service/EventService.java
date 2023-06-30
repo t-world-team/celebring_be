@@ -195,4 +195,16 @@ public class EventService {
         Long count = eventRepository.findMyEventsCount(userId);
         return new PageImpl<>(content, pageable, count);
     }
+
+    /**
+     * 좋아요한 이벤트 목록
+     * @param userId
+     * @param pageable
+     * @return
+     */
+    public Page<EventListDto> getFavoriteEventList(Long userId, Pageable pageable) {
+        List<EventListDto> content = eventRepository.findFavoriteEventList(userId, pageable);
+        getCelebList(content);
+        return new PageImpl<>(content, pageable, content.size());
+    }
 }
