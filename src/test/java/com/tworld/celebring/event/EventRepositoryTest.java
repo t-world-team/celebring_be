@@ -149,7 +149,7 @@ public class EventRepositoryTest {
     @Test
     @DisplayName("셀럽의 지난 이벤트 목록")
     void pastEventByCeleb() {
-        Long searchCelebId = 2l;
+        Long searchCelebId = 1l;
 
         QEvent e = new QEvent("e");
         QEventCeleb ec = new QEventCeleb("ec");
@@ -169,7 +169,7 @@ public class EventRepositoryTest {
                         .and(e.deleteEntity.deleteYn.eq("N")))
                 .offset(0)  // 시작 인덱스
                 .limit(10)   // 개수
-                .orderBy(e.endDate.asc())
+                .orderBy(e.startDate.desc(), e.endDate.desc())
                 .fetch();
 
         for (EventListDto dto : events) {

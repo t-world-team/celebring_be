@@ -110,7 +110,7 @@ public class EventRepository {
                 .join(ec).on(e.id.eq(ec.id.eventId).and(ec.id.celebId.eq(celebId)))
                 .where(Expressions.currentDate().gt(e.endDate)
                         .and(e.deleteEntity.deleteYn.eq("N")))
-                .orderBy(e.endDate.asc())
+                .orderBy(e.startDate.desc(), e.endDate.desc())
                 .fetch();
     }
 
