@@ -4,6 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,9 +21,12 @@ public class EventDetailDto {
     private String mapX;
     private String mapY;
     private String openingTime;
-    private String twitter;
+    private String twitterId;
+    private String twitterUrl;
 
     private int writer;
+
+    private List<String> celeb;
 
     @QueryProjection
     public EventDetailDto(Long eventId, String eventName, Date startDate, Date endDate,
@@ -36,7 +40,8 @@ public class EventDetailDto {
         this.mapX = mapX;
         this.mapY = mapY;
         this.openingTime = openingTime;
-        this.twitter = getTwitter(sns);
+        this.twitterId = getTwitter(sns);
+        this.twitterUrl = sns;
         this.liked = liked == null ? 0 : 1;
         this.writer = writer == null ? 0 : 1;
     }

@@ -209,4 +209,56 @@ public class EventController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Operation(summary = "get my event list", description = "등록한 이벤트 목록 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED(권한 없음)")
+    })
+    @Parameters({
+            @Parameter(name = "page", description = "페이지 번호 (0번부터 시작)", example = "0", required = true),
+            @Parameter(name = "size", description = "한페이지에 나오는 개수", example = "10")
+    })
+    @GetMapping("/my")
+    public ResponseEntity<?> myEventList(@RequestParam(value = "page") int page, @RequestParam(value = "size", defaultValue = "10") int size,
+                                               Authentication authentication) {
+        try {
+            User tokenUser = (User) authentication.getPrincipal();
+            Optional<com.tworld.celebring.user.model.User> userInfo = loginService.getUserInfoByOauthId(tokenUser.getUsername());
+
+            if(userInfo.isPresent()) {
+                Page<EventListDto> list = eventService.getMyEventList(userInfo.get().getId(), PageRequest.of(page, size));
+                return new ResponseEntity<>(list, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Operation(summary = "get favorite event list", description = "좋아요한 이벤트 목록 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED(권한 없음)")
+    })
+    @Parameters({
+            @Parameter(name = "page", description = "페이지 번호 (0번부터 시작)", example = "0", required = true),
+            @Parameter(name = "size", description = "한페이지에 나오는 개수", example = "10")
+    })
+    @GetMapping("/favorite")
+    public ResponseEntity<?> favoriteEventList(@RequestParam(value = "page") int page, @RequestParam(value = "size", defaultValue = "10") int size,
+                                         Authentication authentication) {
+        try {
+            User tokenUser = (User) authentication.getPrincipal();
+            Optional<com.tworld.celebring.user.model.User> userInfo = loginService.getUserInfoByOauthId(tokenUser.getUsername());
+
+            if(userInfo.isPresent()) {
+                Page<EventListDto> list = eventService.getFavoriteEventList(userInfo.get().getId(), PageRequest.of(page, size));
+                return new ResponseEntity<>(list, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
 }
