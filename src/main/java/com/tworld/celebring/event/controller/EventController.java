@@ -1,9 +1,6 @@
 package com.tworld.celebring.event.controller;
 
-import com.tworld.celebring.event.dto.EventAddDto;
-import com.tworld.celebring.event.dto.EventDetailDto;
-import com.tworld.celebring.event.dto.EventListDto;
-import com.tworld.celebring.event.dto.EventUpdateDto;
+import com.tworld.celebring.event.dto.*;
 import com.tworld.celebring.event.model.EventLike;
 import com.tworld.celebring.event.service.EventService;
 import com.tworld.celebring.login.service.LoginService;
@@ -259,6 +256,41 @@ public class EventController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Operation(summary = "get event calendar", description = "셀럽의 이벤트 달력")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED(권한 없음)")
+    })
+    @Parameters({
+            @Parameter(name = "celebId", description = "샐럽 ID", example = "1", required = true),
+            @Parameter(name = "day", description = "날짜/월별", example = "2023-06-15", required = true),
+            @Parameter(name = "type", description = "타입(날짜day 또는 월별month)", example = "day", required = true),
+            @Parameter(name = "page", description = "페이지 번호 (0번부터 시작)", example = "0", required = true),
+            @Parameter(name = "size", description = "한페이지에 나오는 개수", example = "10")
+    })
+    @GetMapping("/{celebId}/calendar")
+    public ResponseEntity<?> eventListByCelebAndDay(
+            @PathVariable Long celebId,
+            @RequestParam String day,
+            @RequestParam String type,
+            @RequestParam(value = "page") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
+        try {
+            if (type.equals("day")) {
+                Page<EventListDto> list = eventService.getEventListByCelebAndDay(celebId, day, PageRequest.of(page, size));
+                return new ResponseEntity<>(list, HttpStatus.OK);
+            }
+            else if (type.equals("month")) {
+                List<EventCalendarDto> list = eventService.getEventCalendar(celebId, day);
+                return new ResponseEntity<>(list, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }
