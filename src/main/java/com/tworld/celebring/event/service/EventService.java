@@ -3,10 +3,7 @@ package com.tworld.celebring.event.service;
 import com.tworld.celebring.celeb.model.ViewCeleb;
 import com.tworld.celebring.common.dto.PageIndex;
 import com.tworld.celebring.common.model.CreateEntity;
-import com.tworld.celebring.event.dto.EventAddDto;
-import com.tworld.celebring.event.dto.EventDetailDto;
-import com.tworld.celebring.event.dto.EventListDto;
-import com.tworld.celebring.event.dto.EventUpdateDto;
+import com.tworld.celebring.event.dto.*;
 import com.tworld.celebring.event.model.Event;
 import com.tworld.celebring.event.model.EventCeleb;
 import com.tworld.celebring.event.model.EventLike;
@@ -27,6 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -206,5 +204,51 @@ public class EventService {
         List<EventListDto> content = eventRepository.findFavoriteEventList(userId, pageable);
         getCelebList(content);
         return new PageImpl<>(content, pageable, content.size());
+    }
+
+    /**
+     * 일 별 셀럽의 이벤트 목록
+     * @param celebId
+     * @param day
+     * @param pageable
+     * @return
+     */
+    public Page<EventListDto> getEventListByCelebAndDay(Long celebId, String day, Pageable pageable) {
+        List<EventListDto> content = eventRepository.findEventListByCelebAndDay(celebId, day, pageable);
+        getCelebList(content);
+        return new PageImpl<>(content, pageable, content.size());
+    }
+
+    /**
+     * 셀럽의 이벤트 달력
+     * @param celebId
+     * @param month
+     * @return
+     */
+    public List<EventCalendarDto> getEventCalendar(Long celebId, String month) {
+        List<EventCalendarDto> content = new ArrayList<>();
+
+        List<EventListDto> events = eventRepository.findEventByCeleb(celebId);
+        Map<String, Integer> map = new HashMap<>();
+        for (EventListDto dto : events) {
+            List<String> days = eventRepository.findEventDays(dto);
+            for (String d: days) {
+                if (month.equals(d.substring(0,7))) { // 해당 달인 경우에만 수행
+                    if (map.containsKey(d)) {
+                        map.put(d, map.get(d) + 1);
+                    } else {
+                        map.put(d, 1);
+                    }
+                }
+            }
+        }
+
+        for (String key: map.keySet()) {
+            content.add(EventCalendarDto.builder()
+                    .day(key)
+                    .count(map.get(key))
+                    .build());
+        }
+        return content;
     }
 }

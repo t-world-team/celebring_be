@@ -1,17 +1,28 @@
 package com.tworld.celebring.event;
 
+import com.nimbusds.oauth2.sdk.util.date.SimpleDate;
+import com.querydsl.core.types.ConstantImpl;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringExpression;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tworld.celebring.celeb.model.*;
 import com.tworld.celebring.event.dto.*;
 import com.tworld.celebring.event.model.*;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import org.assertj.core.util.DateUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
@@ -272,6 +283,47 @@ public class EventRepositoryTest {
 
         for (EventListDto dto: result) {
             System.out.println(dto.getEventId() + " : " + dto.getEventName());
+        }
+    }
+
+    @Test
+    @DisplayName("셀럽의 이벤트 목록(일별)")
+    void eventByCelebAndDay() {
+        Long searchCelebId = 1l;
+        String day = "2023-06-15";
+
+        QEvent e = new QEvent("e");
+        QEventCeleb ec = new QEventCeleb("ec");
+
+        BooleanExpression template = Expressions.booleanTemplate(
+                "STR_TO_DATE({0}, '%Y-%m-%d') between {1} and {2}",
+                day,
+                e.startDate,
+                e.endDate
+        );
+
+        List<EventListDto> events = queryFactory
+                .select(new QEventListDto(
+                        e.id,
+                        e.name,
+                        e.startDate,
+                        e.endDate,
+                        e.cafeName,
+                        e.address
+                ))
+                .from(e)
+                .join(ec).on(e.id.eq(ec.id.eventId).and(ec.id.celebId.eq(searchCelebId)))
+                .where(template
+                        .and(e.deleteEntity.deleteYn.eq("N")))
+                .offset(0)  // 시작 인덱스
+                .limit(5)   // 개수
+                .orderBy(e.startDate.asc())
+                .fetch();
+
+//        assertThat(events.size()).isEqualTo(2);
+        System.out.println(events.size());
+        for (EventListDto dto : events) {
+            System.out.println(dto.getEventId() + " | " + dto.getEventName() + " | " + dto.getStartDate() + "~" + dto.getEndDate());
         }
     }
 }
