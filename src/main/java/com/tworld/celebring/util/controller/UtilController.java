@@ -17,10 +17,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -77,7 +74,7 @@ public class UtilController {
     }
 
     @Operation(summary = "image upload", description = "이미지 등록")
-    @GetMapping("image")
+    @PostMapping(value = "image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> imageUpload(@RequestPart("files") List<MultipartFile> files) {
         try {
             List<Map> result = cloudinaryService.unsignedUpload(files);
