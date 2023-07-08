@@ -4,10 +4,12 @@ import com.tworld.celebring.common.model.CreateEntity;
 import com.tworld.celebring.common.model.DeleteEntity;
 import com.tworld.celebring.common.model.UpdateEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +30,10 @@ public class Celeb {
     @NonNull private String profileImage;
 
     private String keywords;
+
+    @NonNull
+    @Column(columnDefinition = "char")
+    private String confirmYn;
 
     @Embedded
     CreateEntity createEntity;
@@ -52,4 +58,14 @@ public class Celeb {
     @JoinColumn(name = "celebId")
     private List<CelebLike> likes;
 
+    @Builder
+    public Celeb(String name, Date eventDate, String profileImage, String keywords, String confirmYn, Long userId) {
+        this.name = name;
+        this.eventDate = eventDate;
+        this.profileImage = profileImage;
+        this.keywords = keywords;
+        this.confirmYn = confirmYn;
+        this.createEntity = CreateEntity.builder().createBy(userId).createAt(LocalDateTime.now()).build();
+        this.deleteEntity = DeleteEntity.builder().deleteYn("N").build();
+    }
 }
