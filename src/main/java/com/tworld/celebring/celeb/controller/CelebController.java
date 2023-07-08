@@ -1,7 +1,11 @@
 package com.tworld.celebring.celeb.controller;
 
+import com.tworld.celebring.celeb.dto.CelebAddDto;
 import com.tworld.celebring.celeb.dto.CelebDto;
 import com.tworld.celebring.celeb.dto.CelebInfoDto;
+import com.tworld.celebring.celeb.dto.CelebRequestDto;
+import com.tworld.celebring.celeb.model.Celeb;
+import com.tworld.celebring.celeb.model.CelebLink;
 import com.tworld.celebring.celeb.model.CelebSearch;
 import com.tworld.celebring.celeb.service.CelebService;
 import com.tworld.celebring.login.service.LoginService;
@@ -30,6 +34,37 @@ public class CelebController {
 
     @Autowired
     private LoginService loginService;
+
+    @Operation(summary = "add celeb", description = "셀럽 추가 요청")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED(권한 없음)")
+    })
+    @PostMapping("")
+    public ResponseEntity<?> addCeleb(@RequestBody CelebRequestDto celebRequestDto, Authentication authentication) {
+        System.out.println(celebRequestDto);
+        try {
+            User tokenUser = (User) authentication.getPrincipal();
+            Optional<com.tworld.celebring.user.model.User> userInfo = loginService.getUserInfoByOauthId(tokenUser.getUsername());
+
+            if(userInfo.isPresent()){
+                Celeb celeb = celebService.saveCeleb(userInfo.get().getId(), celebRequestDto.getCeleb());
+
+                if(celebRequestDto.getMembers().size() > 0) {
+                    for(CelebAddDto memberAdd : celebRequestDto.getMembers()) {
+                        memberAdd.setKeywords(celeb.getName());
+                        Celeb member = celebService.saveCeleb(userInfo.get().getId(), memberAdd);
+                        CelebLink link = celebService.saveCelebLink(userInfo.get().getId(), celeb.getId(), member.getId());
+                    }
+                }
+
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
 
     @Operation(summary = "get whole celeb list", description = "전체 셀럽 목록 조회")
     @GetMapping("list")
