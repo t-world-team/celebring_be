@@ -2,6 +2,8 @@ package com.tworld.celebring.event.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
+import org.springframework.data.jpa.repository.Query;
+
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +17,13 @@ public class EventListDto {
     private String address;
     private List<String> celeb;
     private List<String> thumbnail;
+
+    @QueryProjection
+    public EventListDto(Long eventId, Date startDate, Date endDate) {
+        this.eventId = eventId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
     @QueryProjection
     public EventListDto(Long eventId, String eventName, Date startDate, Date endDate, String cafeName, String address) {
