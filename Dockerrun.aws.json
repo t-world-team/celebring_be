@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "679097072653.dkr.ecr.ap-northeast-2.amazonaws.com/celebring:latest",
+    "Name": "679097072653.dkr.ecr.ap-northeast-2.amazonaws.com/celebring-pb:latest",
     "Update": "true"
   },
   "Ports": [
